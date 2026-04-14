@@ -99,6 +99,7 @@ class ProcessedArticle(TypedDict):
     published: str
     category: str
     hot: bool
+    source: str   # 取得元ドメイン表示名（例: "TechCrunch"）
 
 
 # ── ダミーデータ ──────────────────────────────────────────────────────────────
@@ -351,6 +352,7 @@ def _dummy_articles(category_name: str) -> list[ProcessedArticle]:
             published=now,
             category=gemini_cat,
             hot=hot,
+            source="Example",
         )
         for i, (title, summary, insight, hot) in enumerate(templates)
     ]
@@ -505,6 +507,10 @@ def process_category(
             cat = item.get("category", "")
             if cat not in VALID_GEMINI_CATS:
                 cat = fallback_cat
+            from urllib.parse import urlparse as _urlparse
+            _host = (_urlparse(original["url"]).hostname or "").lstrip("www.")
+            _parts = _host.split(".")
+            _src = _parts[-2].capitalize() if len(_parts) >= 2 else _host
             article = ProcessedArticle(
                 title_ja=item.get("title_ja", original["title"]),
                 url=original["url"],
@@ -513,6 +519,7 @@ def process_category(
                 published=original["published"],
                 category=cat,
                 hot=bool(item.get("hot", False)),
+                source=_src,
             )
             results.append(article)
             url_cache[original["url"]] = article

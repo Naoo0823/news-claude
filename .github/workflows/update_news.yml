@@ -3,7 +3,7 @@ name: Update News
 on:
   schedule:
     - cron: '0 23 * * *'   # UTC 23:00 = JST 08:00
-  workflow_dispatch:         # 手動実行も可能
+  workflow_dispatch:         # 手動実行ボタンを有効化
 
 jobs:
   update:
@@ -12,9 +12,11 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'
@@ -22,15 +24,18 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run news update
+      - name: Run news update script
         run: python scripts/main.py
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
-      - name: Commit and push
+      - name: Commit and push updated HTML
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/index.html cache/cache.json
+          # Gitの「無視されたファイル」に関する警告を抑制
+          git config set advice.addIgnoredFile false
+          # エラーの原因だった cache/cache.json を除外。docsの中身だけをaddする
+          git add docs/
           git diff --staged --quiet || git commit -m "chore: update news $(date +'%Y-%m-%d')"
           git push

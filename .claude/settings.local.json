@@ -20,7 +20,13 @@
       "Bash(\"/c/Users/naohi/AppData/Local/Programs/Python/Python313/python.exe\" --version)",
       "Bash(/c/Users/naohi/AppData/Local/Programs/Python/Python313/python.exe main.py --dry-run)",
       "Bash(/c/Users/naohi/AppData/Local/Programs/Python/Python313/python.exe main.py)",
-      "Bash(/c/Users/naohi/AppData/Local/Programs/Python/Python313/python.exe -c ':*)"
+      "Bash(/c/Users/naohi/AppData/Local/Programs/Python/Python313/python.exe -c ':*)",
+      "Bash(python scripts/main.py)",
+      "Bash(python3 -c \"print\\('hello'\\)\")",
+      "Bash(where python:*)",
+      "Bash(where py:*)",
+      "Bash(py -c \"print\\('hello'\\)\")",
+      "Bash(py -c ':*)"
     ]
   }
 }
