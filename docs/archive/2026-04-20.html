@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Human Science Insights — 2026-04-20</title>
+  <style>
+    :root {
+      --bg:#fcfce8;--surface:#ffffff;--border:#e8e0d5;--border-subtle:#eeeed8;
+      --accent:#cc1340;--accent2:#a80f34;--hot-accent:#cc1340;
+      --text:#2a2a2a;--text2:#5a4448;--muted:#9e8e92;
+      --star-filled:#c8960c;--star-empty:#ddd5cc;
+      --tag-bg:#fce8ed;--tag-text:#cc1340;
+      --insight-bg:#fff0f3;--insight-border:#cc1340;
+      --hot-bg:#fff5f7;--hot-border:#cc1340;
+      --badge-bg:#cc1340;--radius:8px;
+    }
+    [data-theme="dark"] {
+      --bg:#00212b;--surface:#003847;--border:#005566;--border-subtle:#003040;
+      --accent:#5bc8e0;--accent2:#7dddf0;--hot-accent:#ff7070;
+      --text:#e0e0e0;--text2:#a8c8d4;--muted:#5a8090;
+      --star-filled:#f0c040;--star-empty:#003345;
+      --tag-bg:#004555;--tag-text:#7dddf0;
+      --insight-bg:#003040;--insight-border:#5bc8e0;
+      --hot-bg:#002030;--hot-border:#ff7070;
+      --badge-bg:#5bc8e0;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Yu Gothic','YuGothic','Hiragino Sans','Noto Sans JP',sans-serif;font-size:15px;line-height:1.72;padding:24px 28px 56px}
+    .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px}
+    h1{font-size:20px;font-weight:700;color:var(--accent)}
+    .back-link{font-size:12px;color:var(--accent);text-decoration:none}
+    .back-link:hover{text-decoration:underline}
+    .date-label{font-size:13px;color:var(--muted)}
+    .theme-toggle{background:var(--tag-bg);border:1px solid var(--border);color:var(--accent);padding:5px 14px;border-radius:4px;cursor:pointer;font-size:11.5px;font-weight:500}
+    .card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    @media(max-width:1080px){.card-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:640px){.card-grid{grid-template-columns:1fr;gap:12px}}
+    .card{position:relative;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);border-top:3px solid var(--accent);padding:18px;display:flex;flex-direction:column}
+    .card-hot{border-top-color:var(--hot-accent);border-color:var(--hot-border);background:var(--hot-bg)}
+    .card-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+    .card-tag{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;background:var(--tag-bg);color:var(--tag-text);padding:2px 8px;border-radius:3px}
+    .card-hot .card-tag{background:var(--hot-border);color:#fff}
+    .card-source{font-size:9.5px;color:var(--muted);background:var(--border-subtle);padding:1px 7px;border-radius:3px}
+    .impact-stars{font-size:12px}.star.filled{color:var(--star-filled)}.star.empty{color:var(--star-empty)}
+    .impact-val{font-size:10px;color:var(--muted);margin-left:2px}
+    .card-hashtags{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0 10px}
+    .hashtag{font-size:10.5px;color:var(--accent);background:var(--tag-bg);padding:2px 7px;border-radius:10px}
+    .card-title{font-size:14.5px;font-weight:600;line-height:1.5;min-height:68px;margin-bottom:10px;font-family:'Yu Gothic','YuGothic',-apple-system,sans-serif}
+    .card-title a{color:var(--text);text-decoration:none}.card-title a:hover{color:var(--accent)}
+    .section-label-summary{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);margin:12px 0 5px}
+    .section-label-insight{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);margin:12px 0 5px}
+    .card-summary{font-size:13.5px;color:var(--text2);line-height:1.68}
+    .card-insight{font-size:13.5px;color:var(--text);background:var(--insight-bg);border-left:3px solid var(--insight-border);border-radius:0 4px 4px 0;padding:10px 13px;line-height:1.68}
+    .card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:10px;border-top:1px solid var(--border-subtle)}
+    .card-date{font-size:11px;color:var(--muted)}.read-link{font-size:12px;color:var(--accent);text-decoration:none;font-weight:600}
+    .read-link:hover{text-decoration:underline}
+    .section-heading{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--hot-accent);margin-bottom:18px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+    .section-heading.regular{color:var(--accent)}
+    .section-divider{border:none;border-top:1px solid var(--border);margin:28px 0}
+    .empty{text-align:center;color:var(--muted);padding:60px 0;font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <div>
+      <h1>Human Science Insights</h1>
+      <span class="date-label">2026-04-20 のアーカイブ</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <a class="back-link" href="index.html">← 一覧へ戻る</a>
+      <button class="theme-toggle" onclick="(function(){var h=document.documentElement,d=h.dataset.theme==='dark';h.dataset.theme=d?'light':'dark';this.textContent=d?'Dark Mode':'Light Mode'}).call(this)">Dark Mode</button>
+    </div>
+  </div>
+  
+  <div class="section-heading">Hot Topics</div>
+  <div class="card-grid" style="margin-bottom:28px">
+    
+    <article class="card card-hot">
+      <div class="card-meta">
+        <span class="card-tag">AI · 社会実装</span>
+        <span class="card-source">Techcrunch</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.5</span></span>
+      </div>
+      <div class="card-title"><a href="https://techcrunch.com/2026/04/19/the-12-month-window/" target="_blank" rel="noopener">12ヶ月のウィンドウ：基盤モデルの急速な拡大がAIスタートアップの存在基盤を脅かす</a></div>
+      <div class="card-hashtags"><span class="hashtag">#基盤モデル</span><span class="hashtag">#AIスタートアップ</span><span class="hashtag">#市場再編</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">多くのAIスタートアップが基盤モデル企業がまだ進出していないニッチ分野に存在しているが、基盤モデルの急速な機能拡張により、これらのスタートアップの競争優位性は限定的な期間しか持たないという現実が浮き彫りになっている。この12ヶ月程度のウィンドウ内に、多くのスタートアップは大規模モデルの脅威に対抗する戦略を構築する必要があり、業界の再編成が急速に進むと予想される。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">企業のAI導入戦略を検討する際、汎用基盤モデルの進化速度を前提に、特定領域への垂直統合やドメイン固有の学習・カスタマイズを重視する必要がある。スタートアップの買収・提携候補を評価する際も、単なる機能的ニッチではなく『基盤モデルでは代替困難な業界ノウハウ・データ・顧客基盤』の有無が生死を分ける判断基準となるだろう。</div>
+      <div class="card-footer"><span class="card-date">2026-04-20 04:30</span><a class="read-link" href="https://techcrunch.com/2026/04/19/the-12-month-window/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+  </div>
+  <hr class="section-divider">
+  
+  <div class="section-heading regular">All Articles</div>
+  <div class="card-grid">
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">心理 · 認知</span>
+        <span class="card-source">Neurosciencenews</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.2</span></span>
+      </div>
+      <div class="card-title"><a href="https://neurosciencenews.com/mental-sharpness-productivity-gap-30552/" target="_blank" rel="noopener">日々の「精神的鋭敏性」が生産性を左右する</a></div>
+      <div class="card-hashtags"><span class="hashtag">#生産性</span><span class="hashtag">#脳科学</span><span class="hashtag">#パフォーマンス管理</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">トロント大学の12週間研究により、日々の精神的鋭敏性の変動が最良日と最悪日の間で80分の生産性差をもたらすことが判明した。この発見は、個人の最大パフォーマンスを発揮するタイミングを科学的に特定できる可能性を示唆している。組織のマネジメントやスケジューリング戦略に根本的な再考を迫る知見である。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">日々の精神的鋭敏性を測定・可視化するテックツールの導入により、営業・企画・開発など高度な認知業務のスケジューリングを個人の生理的ピークに合わせることで、生産性を大幅に向上させられる可能性がある。採用・育成段階で候補者の「精神的鋭敏性パターン」を把握し、職種配置や勤務シフト設計に反映させる人材マネジメント戦略も考えられる。会議や重要な意思決定を全員の精神的ピークに集約する組織文化の構築は、エンゲージメント向上と事業成果の両面で効果をもたらすだろう。</div>
+      <div class="card-footer"><span class="card-date">2026-04-20 03:09</span><a class="read-link" href="https://neurosciencenews.com/mental-sharpness-productivity-gap-30552/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 社会実装</span>
+        <span class="card-source">Techcrunch</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.8</span></span>
+      </div>
+      <div class="card-title"><a href="https://techcrunch.com/2026/04/19/techcrunch-mobility-uber-enters-its-assetmaxxing-era/" target="_blank" rel="noopener">TechCrunch Mobility：UberがAI駆動型資産最大化戦略へ転換</a></div>
+      <div class="card-hashtags"><span class="hashtag">#AI戦略</span><span class="hashtag">#移動・物流</span><span class="hashtag">#資産最適化</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">Uberが輸送業の在り方をAI技術の導入によって根本的に再構築しており、資産効率化・動的価格設定・ルート最適化などの領域でAIが主要な役割を担うようになった。このシフトは単なる技術導入ではなく、配車サービス業界全体の経営パラダイムを『資産所有型』から『データ・アルゴリズム駆動型』へ転換させる可能性を示唆している。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">配送・物流・移動サービス企業は、単なるAIツール導入ではなく、リアルタイムデータ収集・予測モデル・動的意思決定アルゴリズムを中核事業として再設計する必要がある。競争優位性は『どのAIモデルを使うか』ではなく『いかにデータとアルゴリズムで顧客・供給者・資産配置を統合的に最適化するか』に集約される。</div>
+      <div class="card-footer"><span class="card-date">2026-04-20 01:01</span><a class="read-link" href="https://techcrunch.com/2026/04/19/techcrunch-mobility-uber-enters-its-assetmaxxing-era/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">心理 · 認知</span>
+        <span class="card-source">Sciencedaily</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">2.3</span></span>
+      </div>
+      <div class="card-title"><a href="https://www.sciencedaily.com/releases/2026/04/260417224527.htm" target="_blank" rel="noopener">このタイプのオリーブオイルが脳力を高める可能性がある</a></div>
+      <div class="card-hashtags"><span class="hashtag">#腸脳軸</span><span class="hashtag">#栄養学</span><span class="hashtag">#認知パフォーマンス</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">2年間の研究により、エクストラバージンオリーブオイルの摂取が腸マイクロバイオームを多様化させ、認知パフォーマンスを向上させることが明らかになった。腸内細菌と脳機能の因果関係を特定した点が、栄養学と神経科学の融合を示唆している。シンプルな食習慣の改善が認知能力に影響する実証的証拠は、組織の健康投資政策の根拠となり得る。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">職場の健康福利厚生プログラムに「腸脳軸を考慮した栄養指導」を組み込み、特にホワイトカラー層への認知パフォーマンス向上施策として導入する価値がある。採用時の適性検査と併せて、個人の栄養バイオマーカーを追跡し、カスタマイズされた食事改善提案を行うことで、エンゲージメント向上と欠勤率低下につながる可能性がある。</div>
+      <div class="card-footer"><span class="card-date">2026-04-19 12:45</span><a class="read-link" href="https://www.sciencedaily.com/releases/2026/04/260417224527.htm" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+  </div>
+</body>
+</html>
