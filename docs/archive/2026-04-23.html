@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Human Science Insights — 2026-04-23</title>
+  <style>
+    :root {
+      --bg:#fcfce8;--surface:#ffffff;--border:#e8e0d5;--border-subtle:#eeeed8;
+      --accent:#cc1340;--accent2:#a80f34;--hot-accent:#cc1340;
+      --text:#2a2a2a;--text2:#5a4448;--muted:#9e8e92;
+      --star-filled:#c8960c;--star-empty:#ddd5cc;
+      --tag-bg:#fce8ed;--tag-text:#cc1340;
+      --insight-bg:#fff0f3;--insight-border:#cc1340;
+      --hot-bg:#fff5f7;--hot-border:#cc1340;
+      --badge-bg:#cc1340;--radius:8px;
+    }
+    [data-theme="dark"] {
+      --bg:#00212b;--surface:#003847;--border:#005566;--border-subtle:#003040;
+      --accent:#5bc8e0;--accent2:#7dddf0;--hot-accent:#ff7070;
+      --text:#e0e0e0;--text2:#a8c8d4;--muted:#5a8090;
+      --star-filled:#f0c040;--star-empty:#003345;
+      --tag-bg:#004555;--tag-text:#7dddf0;
+      --insight-bg:#003040;--insight-border:#5bc8e0;
+      --hot-bg:#002030;--hot-border:#ff7070;
+      --badge-bg:#5bc8e0;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Yu Gothic','YuGothic','Hiragino Sans','Noto Sans JP',sans-serif;font-size:15px;line-height:1.72;padding:24px 28px 56px}
+    .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px}
+    h1{font-size:20px;font-weight:700;color:var(--accent)}
+    .back-link{font-size:12px;color:var(--accent);text-decoration:none}
+    .back-link:hover{text-decoration:underline}
+    .date-label{font-size:13px;color:var(--muted)}
+    .theme-toggle{background:var(--tag-bg);border:1px solid var(--border);color:var(--accent);padding:5px 14px;border-radius:4px;cursor:pointer;font-size:11.5px;font-weight:500}
+    .card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    @media(max-width:1080px){.card-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:640px){.card-grid{grid-template-columns:1fr;gap:12px}}
+    .card{position:relative;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);border-top:3px solid var(--accent);padding:18px;display:flex;flex-direction:column}
+    .card-hot{border-top-color:var(--hot-accent);border-color:var(--hot-border);background:var(--hot-bg)}
+    .card-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+    .card-tag{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;background:var(--tag-bg);color:var(--tag-text);padding:2px 8px;border-radius:3px}
+    .card-hot .card-tag{background:var(--hot-border);color:#fff}
+    .card-source{font-size:9.5px;color:var(--muted);background:var(--border-subtle);padding:1px 7px;border-radius:3px}
+    .impact-stars{font-size:12px}.star.filled{color:var(--star-filled)}.star.empty{color:var(--star-empty)}
+    .impact-val{font-size:10px;color:var(--muted);margin-left:2px}
+    .card-hashtags{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0 10px}
+    .hashtag{font-size:10.5px;color:var(--accent);background:var(--tag-bg);padding:2px 7px;border-radius:10px}
+    .card-title{font-size:14.5px;font-weight:600;line-height:1.5;min-height:68px;margin-bottom:10px;font-family:'Yu Gothic','YuGothic',-apple-system,sans-serif}
+    .card-title a{color:var(--text);text-decoration:none}.card-title a:hover{color:var(--accent)}
+    .section-label-summary{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);margin:12px 0 5px}
+    .section-label-insight{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);margin:12px 0 5px}
+    .card-summary{font-size:13.5px;color:var(--text2);line-height:1.68}
+    .card-insight{font-size:13.5px;color:var(--text);background:var(--insight-bg);border-left:3px solid var(--insight-border);border-radius:0 4px 4px 0;padding:10px 13px;line-height:1.68}
+    .card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:10px;border-top:1px solid var(--border-subtle)}
+    .card-date{font-size:11px;color:var(--muted)}.read-link{font-size:12px;color:var(--accent);text-decoration:none;font-weight:600}
+    .read-link:hover{text-decoration:underline}
+    .section-heading{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--hot-accent);margin-bottom:18px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+    .section-heading.regular{color:var(--accent)}
+    .section-divider{border:none;border-top:1px solid var(--border);margin:28px 0}
+    .empty{text-align:center;color:var(--muted);padding:60px 0;font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <div>
+      <h1>Human Science Insights</h1>
+      <span class="date-label">2026-04-23 のアーカイブ</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <a class="back-link" href="index.html">← 一覧へ戻る</a>
+      <button class="theme-toggle" onclick="(function(){var h=document.documentElement,d=h.dataset.theme==='dark';h.dataset.theme=d?'light':'dark';this.textContent=d?'Dark Mode':'Light Mode'}).call(this)">Dark Mode</button>
+    </div>
+  </div>
+  
+  <div class="section-heading">Hot Topics</div>
+  <div class="card-grid" style="margin-bottom:28px">
+    
+    <article class="card card-hot">
+      <div class="card-meta">
+        <span class="card-tag">AI · プレス</span>
+        <span class="card-source">Openai</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.7</span></span>
+      </div>
+      <div class="card-title"><a href="https://openai.com/index/introducing-workspace-agents-in-chatgpt" target="_blank" rel="noopener">ChatGPT内ワークスペースエージェント正式ローンチ——クラウドベース複雑ワークフロー自動化</a></div>
+      <div class="card-hashtags"><span class="hashtag">#エージェント自動化</span><span class="hashtag">#デジタル変革</span><span class="hashtag">#組織プロセス最適化</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">OpenAIがCodex駆動のワークスペースエージェントを正式リリース。クラウド上で複雑なワークフローを自動実行し、複数ツール連携とチーム運用のセキュアなスケーリングが可能に。組織の自動化アーキテクチャが根本的に再設計される可能性。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">専用エージェントプラットフォーム不要で、ChatGPTアカウントとツール連携だけで組織全体のプロセス自動化が実現。RPA・ワークフローエンジン市場のパラダイムシフト始まり——従来の高額なデジタルトランスフォーメーション投資が不要になる分岐点。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 19:00</span><a class="read-link" href="https://openai.com/index/introducing-workspace-agents-in-chatgpt" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card card-hot">
+      <div class="card-meta">
+        <span class="card-tag">AI · 社会実装</span>
+        <span class="card-source">Techcrunch</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.5</span></span>
+      </div>
+      <div class="card-title"><a href="https://techcrunch.com/2026/04/22/google-cloud-next-new-tpu-ai-chips-compete-with-nvidia/" target="_blank" rel="noopener">Google CloudがNvidia対抗の新AI専用チップ2種を発表——TPUの高速化・低コスト化で計算インフラの競争構図が激変</a></div>
+      <div class="card-hashtags"><span class="hashtag">#AI基盤インフラ</span><span class="hashtag">#チップ競争</span><span class="hashtag">#コスト削減</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">GoogleはNvidiaのGPUに対抗する新型TPU（Tensor Processing Unit）を2種発表し、従来版比で高速化と低コスト化を実現した。クラウドベースの機械学習・AI推論の価格競争がさらに激化し、企業のAI導入コストが大幅に低下する可能性がある。ハードウェア多様化により、2027年までのAI産業の成熟度と民主化が加速する転機となる。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">TPUのコスト・性能向上により、中堅・中小企業でもエンタープライズグレードのAI基盤を低コストで構築・運用できるようになる。組織内のAI導入判断が「技術的可能性」から「経営効率」にシフトし、業務効率化プロジェクトの承認スピードが格段に向上する可能性が高い。</div>
+      <div class="card-footer"><span class="card-date">2026-04-23 03:39</span><a class="read-link" href="https://techcrunch.com/2026/04/22/google-cloud-next-new-tpu-ai-chips-compete-with-nvidia/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card card-hot">
+      <div class="card-meta">
+        <span class="card-tag">AI · 社会実装</span>
+        <span class="card-source">Openai</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.5</span></span>
+      </div>
+      <div class="card-title"><a href="https://openai.com/academy/workspace-agents" target="_blank" rel="noopener">ChatGPT内ワークスペースエージェント——反復的ワークフロー自動化とツール連携</a></div>
+      <div class="card-hashtags"><span class="hashtag">#エージェント自動化</span><span class="hashtag">#ワークフロー最適化</span><span class="hashtag">#チーム生産性</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">ChatGPT上でワークスペースエージェントを構築・運用でき、反復的なワークフローを自動化し、複数ツール統合と組織運用のスケーリングが可能に。ノーコード/ローコードでチーム全体が業務自動化を実装できる転換点。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">エージェント化により、一般社員が個別スクリプト作成なしに日々のデータ処理・レポート作成・ツール間連携を自動化できる世界へ移行。RPA・ワークフロー自動化の民主化が加速し、組織全体の生産性構造が変わる。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 19:00</span><a class="read-link" href="https://openai.com/academy/workspace-agents" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card card-hot">
+      <div class="card-meta">
+        <span class="card-tag">AI · 学術</span>
+        <span class="card-source">Arxiv</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.5</span></span>
+      </div>
+      <div class="card-title"><a href="https://arxiv.org/abs/2604.18805" target="_blank" rel="noopener">AI科学者は科学的推論なく結果を生み出す</a></div>
+      <div class="card-hashtags"><span class="hashtag">#LLM推論</span><span class="hashtag">#科学的方法</span><span class="hashtag">#自動化リスク</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">自律的に科学研究を行う LLM ベースシステムが増加しているが、その推論が科学の認識規範に準拠し自己補正可能か不明であった。本研究は、8領域の LLM 科学エージェントを評価し、ワークフロー実行から仮説駆動推論まで、科学的方法からの逸脱パターンを実証した。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">LLM は表面的な「科学タスク完遂」に見えても、帰納・演繹・反証の論理構造を正確に踏まえていない可能性がある。R&D やデータ分析業務で LLM 駆動の自動化を導入する際、単なる出力チェックでなく『推論プロセス監査』を制度化する必要があり、人間研究者のジャッジメント組み込み設計が重要になる。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 13:00</span><a class="read-link" href="https://arxiv.org/abs/2604.18805" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+  </div>
+  <hr class="section-divider">
+  
+  <div class="section-heading regular">All Articles</div>
+  <div class="card-grid">
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">脳科学 · プレス</span>
+        <span class="card-source">Neurosciencenews</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.8</span></span>
+      </div>
+      <div class="card-title"><a href="https://neurosciencenews.com/astrocyte-networks-brain-communication-30575/" target="_blank" rel="noopener">アストロサイトが脳内の長距離通信ネットワークを構築——ニューロン中心説の100年を覆す発見</a></div>
+      <div class="card-hashtags"><span class="hashtag">#脳神経科学</span><span class="hashtag">#アストロサイト</span><span class="hashtag">#パラダイムシフト</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">神経科学者が脳内の「第二のネットワーク」を発見した。AIを用いたマッピングにより、アストロサイト（グリア細胞）が遠く離れた脳領域を接続していることが明らかになり、これまで100年間ニューロン中心で理解されてきた脳科学の基礎的認識が覆されようとしている。この発見は、認知機能、学習、脳疾患の理解に根本的な変化をもたらす可能性を持つ。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">アストロサイトネットワークの発見は、脳の情報処理メカニズムの理解を刷新する。組織人事・教育の領域では、学習効率や認知負荷の最適化、さらには神経発達障害への対応戦略に新しい科学的根拠をもたらす可能性がある。また、この「隠れたネットワーク」の概念は、組織内の非公式ネットワークや心理的安全性の構築メカニズムを理解する上での強力なメタファーになりうる。</div>
+      <div class="card-footer"><span class="card-date">2026-04-23 03:00</span><a class="read-link" href="https://neurosciencenews.com/astrocyte-networks-brain-communication-30575/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">脳科学 × AI</span>
+        <span class="card-source">Arxiv</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.8</span></span>
+      </div>
+      <div class="card-title"><a href="https://arxiv.org/abs/2604.18637" target="_blank" rel="noopener">NeuroAIと未来：神経科学と人工知能の進展を橋渡けする</a></div>
+      <div class="card-hashtags"><span class="hashtag">#NeuroAI</span><span class="hashtag">#次世代AI設計</span><span class="hashtag">#脳神経科学の応用</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">米国立科学財団が2025年8月に開催したワークショップの成果に基づき、現在のAIが持つ3つの根本的な能力ギャップ（物理世界との相互作用不足、学習メカニズムの不十分さ、汎化能力の限界）を特定し、神経科学からの示唆を通じてこれらの課題解決の方向性を提示している。脳科学とAIの融合により、次世代AIのアーキテクチャ設計に革新的な示唆が得られる可能性を示唆している。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">現在のAI技術が直面する「物理世界への不適応」「学習効率の限界」「汎化能力不足」といった課題に対して、神経システムの動作原理から着想を得た設計改善が業務用エージェント・ロボティクス・自律システムの実装を劇的に加速させる可能性がある。特に環境適応型の意思決定支援システムやロボット制御系への応用が急速に進展すると予想される。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 13:00</span><a class="read-link" href="https://arxiv.org/abs/2604.18637" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">脳科学 × AI</span>
+        <span class="card-source">Neurosciencenews</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.6</span></span>
+      </div>
+      <div class="card-title"><a href="https://neurosciencenews.com/physmap-cell-type-brain-mental-health-30577/" target="_blank" rel="noopener">精神疾患の細胞レベルの根拠：AI脳解析ツール PhysMAP</a></div>
+      <div class="card-hashtags"><span class="hashtag">#精神神経医学</span><span class="hashtag">#AI診断</span><span class="hashtag">#個別最適化治療</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">研究者らは脳の電気信号記録から特定のニューロンタイプを特定するAIツール『PhysMAP』を開発し、精神神経の『回路病変』の治療に活用できることを示した。この技術は神経精神医学における診断と治療の個別化を根底から変える可能性を持つ。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">精神疾患が神経回路レベルでの客観的診断が可能になれば、EAP（従業員支援プログラム）やメンタルヘルス施策の効果測定と個別最適化が飛躍的に進む。組織内のメンタルヘルス介入を『症状ベース』から『神経回路ベース』へシフトさせることで、復帰率と長期的なウェルビーイング向上が期待できる。</div>
+      <div class="card-footer"><span class="card-date">2026-04-23 04:28</span><a class="read-link" href="https://neurosciencenews.com/physmap-cell-type-brain-mental-health-30577/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">脳科学 × AI</span>
+        <span class="card-source">Arxiv</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.6</span></span>
+      </div>
+      <div class="card-title"><a href="https://arxiv.org/abs/2604.18827" target="_blank" rel="noopener">OmniMouse：150億ニューラルトークンでの多モーダル・マルチタスク脳モデルのスケーリング特性</a></div>
+      <div class="card-hashtags"><span class="hashtag">#脳スケーリング則</span><span class="hashtag">#生物学的AI</span><span class="hashtag">#マルチタスク学習</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">73匹のマウスの視覚皮質から記録された310万ニューロン分の150億以上のニューラルトークンデータセットを用いて、脳活動モデリングにおけるスケーリング則が言語・画像モデルと同様の原理に従うかを検証している。大規模脳データに対する深層学習の適用により、脳の情報処理原理を模倣したAIモデルの学習メカニズムが明らかになる可能性を示唆している。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">マウス脳のニューラル活動を150億トークンのスケールで学習させることで、脳の多感覚統合・マルチタスク処理の最適アルゴリズムが浮き彫りになり、それを人工ニューロンネットワークに直接転用することで、より頑健で効率的な生産性ツール・マルチモーダル意思決定エージェントの開発が加速する見込みがある。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 13:00</span><a class="read-link" href="https://arxiv.org/abs/2604.18827" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 社会実装</span>
+        <span class="card-source">Techcrunch</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.4</span></span>
+      </div>
+      <div class="card-title"><a href="https://techcrunch.com/2026/04/22/openai-teams-up-with-infosys-to-bring-ai-tools-to-more-businesses/" target="_blank" rel="noopener">OpenAIがInfosysと提携——エンタープライズAIツールの大規模導入へ</a></div>
+      <div class="card-hashtags"><span class="hashtag">#エンタープライズAI</span><span class="hashtag">#SIer連携</span><span class="hashtag">#開発生産性</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">OpenAIとInfosysの戦略的パートナーシップにより、ソフトウェア開発の近代化・レガシーシステム現代化・DevOpsの自動化を実現。Infosysのグローバルクライアント基盤を通じて、AIツールの大規模エンタープライズ導入が加速する。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">エンタープライズAI導入のテンプレート化が進行中。SIerを経由したエージェント型AIの組織内浸透により、開発生産性が30-50%向上する事例が増加すれば、組織構造・評価制度の再設計が急務になる。早期適応組織のリード拡大は必至。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 23:22</span><a class="read-link" href="https://techcrunch.com/2026/04/22/openai-teams-up-with-infosys-to-bring-ai-tools-to-more-businesses/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 学術</span>
+        <span class="card-source">Arxiv</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.4</span></span>
+      </div>
+      <div class="card-title"><a href="https://arxiv.org/abs/2604.18789" target="_blank" rel="noopener">ARES：ポリシー・報酬システムの適応的レッドティーミングと end-to-end 修復</a></div>
+      <div class="card-hashtags"><span class="hashtag">#LLM安全性</span><span class="hashtag">#報酬モデル</span><span class="hashtag">#レッドティーミング</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">RLHF（人間フィードバックから強化学習）ベースのLLM整列には、不完全な報酬モデルが単一障害点となり、危険な行動を見逃すリスクがある。本研究は、ポリシーレベルの弱点だけでなく報酬モデル自体の脆弱性を対象とした適応的レッドティーミングと修復手法 ARES を提案し、end-to-end での安全性強化を実現する。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">LLMの安全性は報酬モデルの設計に大きく依存するが、ARES は報酬モデルのギャップを自動検出・修復できる。エンタープライズシステムでLLMを展開する際、このフレームワークを組織の「ガバナンス・チェックシステム」として組み込めば、規制リスクとレピュテーション リスクを低減できる。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 13:00</span><a class="read-link" href="https://arxiv.org/abs/2604.18789" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 学術</span>
+        <span class="card-source">Arxiv</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.4</span></span>
+      </div>
+      <div class="card-title"><a href="https://arxiv.org/abs/2604.18874" target="_blank" rel="noopener">敵対的環境はエージェント型AI をいかに誤導するか</a></div>
+      <div class="card-hashtags"><span class="hashtag">#エージェント脆弱性</span><span class="hashtag">#信頼ギャップ</span><span class="hashtag">#対抗的評価</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">ツール統合型エージェントは外部ツールが出力を現実に接地すると前提して導入されるが、その依存性は重大な攻撃面となる。本論文は「信頼ギャップ」を指摘：現在の評価は良性環境でのみベンチマークされ、「ツールが嘘をついた場合」が考慮されていない。エージェント導入時の根本的な脆弱性を露呈させる。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">これはエージェント型AI の本質的なリスク—外部ツール（API、データベース、Web サービス）の信頼性が破綻した時の動作が未検証である点—を指摘する重要な警告である。実務では、エージェント導入前に、ツール故障・中毒攻撃・キャッシュポイズニング等を想定した防御設計が必須となり、企業の AI 安全ガバナンスの大幅な見直しを迫るパラダイムシフトとなり得る。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 13:00</span><a class="read-link" href="https://arxiv.org/abs/2604.18874" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 学術</span>
+        <span class="card-source">Arxiv</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.3</span></span>
+      </div>
+      <div class="card-title"><a href="https://arxiv.org/abs/2604.18847" target="_blank" rel="noopener">人間指導によるコンピュータ使用エージェントの害復旧</a></div>
+      <div class="card-hashtags"><span class="hashtag">#エージェント安全性</span><span class="hashtag">#害復旧</span><span class="hashtag">#実行後セーフガード</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">LM エージェントが実コンピュータシステムで動作実行する能力を持つにつれ、有害行為の予防だけでなく、予防失敗時の害の効果的な改善が必要になる。本論文は、実行後セーフガードにおける「害復旧」という課題を形式化し、エージェントを有害状態から最適に操舵するソリューションを提案する。これはエージェント型AI の安全運用における極めて重要な課題である。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">エージェント型AI の実社会導入を想定すると、予防的なセーフガードだけでなく、万が一の害が発生した際の復旧手法の体系化は必須となる。本研究は、企業のエージェント導入時に、インシデント管理フロー設計の参考知見として直結する。具体的には、「誤行動検知→状態復旧→ユーザー交渉」という3段階スキームの実装設計に活かせる可能性がある。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 13:00</span><a class="read-link" href="https://arxiv.org/abs/2604.18847" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · プレス</span>
+        <span class="card-source">Techcrunch</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.2</span></span>
+      </div>
+      <div class="card-title"><a href="https://techcrunch.com/2026/04/22/google-makes-an-interesting-choice-with-its-new-agent-building-tool-for-enterprises/" target="_blank" rel="noopener">Googleが企業向けエージェント構築ツールで興味深い選択——IT・技術ユーザー向けプラットフォーム</a></div>
+      <div class="card-hashtags"><span class="hashtag">#AIエージェント</span><span class="hashtag">#企業導入</span><span class="hashtag">#デジタル組織改革</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">GoogleがGemini Enterprise Agent Platformを発表。IT・技術ユーザーを対象とした企業向けエージェント構築ツールで、プロンプトエンジニアリングではなく開発者中心のアプローチを採用している。この方針転換は、AIエージェント市場における民主化と専門化の二層戦略を示唆している。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">エージェント技術がコンシューマー市場から企業IT基盤へシフトする転換点。組織内のワークフロー自動化やシステム統合を技術部門が主導する体制設計が求められ、IT部門と事業部門の連携再編が必須になる可能性がある。</div>
+      <div class="card-footer"><span class="card-date">2026-04-23 01:58</span><a class="read-link" href="https://techcrunch.com/2026/04/22/google-makes-an-interesting-choice-with-its-new-agent-building-tool-for-enterprises/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">脳科学 × AI</span>
+        <span class="card-source">Plos</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.2</span></span>
+      </div>
+      <div class="card-title"><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0347671" target="_blank" rel="noopener">RMETNet：リーマン幾何特徴とTSLANetに基づく被験者横断的運動イメージEEG信号分類モデル</a></div>
+      <div class="card-hashtags"><span class="hashtag">#BCI</span><span class="hashtag">#脳波分析</span><span class="hashtag">#ニューロモーフィック</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">脳波（EEG）を用いた運動イメージ分析は脳-コンピュータインターフェース（BCI）の自然な相互作用と自律制御に不可欠だが、深層学習モデルは被験者間変動に対応しにくい。RMETNetはリーマン幾何と時空間学習を組み合わせることで、異なる被験者間での汎化性能を大幅に向上させる。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">BCIを用いた手足の麻痺患者向けロボット制御や、脳に埋め込んだインターフェースを介した意思伝達デバイスの実用化が加速する。この技術により、個人差を吸収した汎用的なBCI応用が可能になり、医療・リハビリ・作業支援の領域で産業化が進む可能性がある。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 23:00</span><a class="read-link" href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0347671" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 学術</span>
+        <span class="card-source">Arxiv</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.2</span></span>
+      </div>
+      <div class="card-title"><a href="https://arxiv.org/abs/2604.18724" target="_blank" rel="noopener">言語モデル生成分布の可視化と比較：単一出力を超えて</a></div>
+      <div class="card-hashtags"><span class="hashtag">#言語モデル可視化</span><span class="hashtag">#品質保証</span><span class="hashtag">#プロンプト最適化</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">言語モデルユーザーは通常、単一の出力のみを評価するが、各出力は可能な完成の広い分布から得られた1つのサンプルに過ぎない。本研究は、分布のモード・エッジケース・プロンプト感度を可視化し比較するフレームワークを提案し、ユーザーが逸話的な過剰一般化を避け、より堅牢なモデル評価・改善を実現する。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">複数の出力分布を可視化することで、プロンプトエンジニアリングやファインチューニング時に「見えない落とし穴」を早期発見できる。業務自動化タスク（例：カスタマーサービス、ドキュメント生成）において、分布分析により異常応答やバイアスを事前検出し、品質保証コストを削減できる可能性がある。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 13:00</span><a class="read-link" href="https://arxiv.org/abs/2604.18724" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">心理 · 認知</span>
+        <span class="card-source">Frontiersin</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.2</span></span>
+      </div>
+      <div class="card-title"><a href="https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1532064" target="_blank" rel="noopener">虐待的スーパーバイザンスが失敗からの学習に及ぼす影響：恐怖の仲介メカニズムに関する条件付きモデル</a></div>
+      <div class="card-hashtags"><span class="hashtag">#失敗学習</span><span class="hashtag">#心理的安全性</span><span class="hashtag">#マネジメント条件モデル</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">本研究は、虐待的スーパーバイザンス（上司の否定的・抑制的な対応）が失敗経験からの学習にいかなる条件下で促進的か阻害的かを検証している。従来の研究が虐待的スーパーバイザンスの一般的な悪影響を焦点化してきたのに対し、本研究は「失敗という特定文脈」における恐怖心の機能的・非機能的メカニズムを資源保全理論に基づき解明している。これは組織における失敗許容文化と心理的安全性の設計に根本的な見直しを迫る知見である。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">現在の「心理的安全性」重視の組織設計では、マネジャーの統制的対応が常に悪と見なされている。しかし本研究が示唆するのは、適切な文脈（失敗時の学習欲求が高い場合など）では、適度な緊張感が学習効果を高める可能性である。組織学習環境設計では、マネジメントスタイルを一元化するのではなく、従業員の学習段階・心理状態に応じた条件付き対応（高い自律性がある場合は支援的に、学習意欲が低い場合は適度な構造化）を組み込む必要がある。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 09:00</span><a class="read-link" href="https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1532064" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">心理 · 認知</span>
+        <span class="card-source">Frontiersin</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.2</span></span>
+      </div>
+      <div class="card-title"><a href="https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1765331" target="_blank" rel="noopener">見えない傷、崩壊した信頼：学校いじめにおける認知・共感のギャップと体系的介入フレームワークの混合方法研究</a></div>
+      <div class="card-hashtags"><span class="hashtag">#いじめ対応</span><span class="hashtag">#認知・共感ギャップ</span><span class="hashtag">#組織信頼</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">学校いじめにおいて、被害学生の主観的なトラウマ体験と学校当局が用いる行動ベースの客観的枠組みの間に生じる「認知・共感のギャップ」を実証的に明らかにしている。混合方法論を用いることで、このギャップが信頼関係の崩壊につながるメカニズムを解明し、組織的介入の実効性を高める方法論を提示している。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">この認知・共感のギャップは学校組織だけでなく、企業の組織内トラブル対応やハラスメント防止でも広く見られる問題である。被害者の主観的体験を認識し、それを制度的対応に組み込むことで、信頼回復と再発防止の実効性が大きく向上する。人事・コンプライアンス部門は、ポリシー立案時に必ず当事者の認知・感情プロセスを調査・可視化する必要があり、この研究の方法論は実装価値が極めて高い。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 09:00</span><a class="read-link" href="https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1765331" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 学術</span>
+        <span class="card-source">Nature</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.2</span></span>
+      </div>
+      <div class="card-title"><a href="https://www.nature.com/articles/s42256-026-01216-w" target="_blank" rel="noopener">化学空間の端における分子深層学習</a></div>
+      <div class="card-hashtags"><span class="hashtag">#分子設計AI</span><span class="hashtag">#分布外予測</span><span class="hashtag">#創薬革新</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">生活性予測と分子再構築を同時に行う深層学習モデルが、化学空間の未知領域における予測信頼度を定量化し、臨床関連性の高い2つのキナーゼ阻害剤の発見に実験的に成功しました。これは従来のAIモデルが苦手とされた分布外領域での意思決定に対する根本的な解決策を提示しています。医薬品開発だけでなく、データ分布の外縁での予測信頼度を自動評価する汎用的なAIアーキテクチャとして産業への波及が期待されます。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">このモデルアーキテクチャは、未知の顧客ニーズやマーケット機会を予測する際の「予測信頼度の自動評価」メカニズムとして、新規事業開発やR&Dの意思決定支援AIに直結します。AIが「わかりません」と正直に判定できる能力は、過度な自動化による誤判断回避と人間の介入タイミングの最適化を実現し、生産性向上と リスク低減の両立を可能にします。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 09:00</span><a class="read-link" href="https://www.nature.com/articles/s42256-026-01216-w" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">脳科学 × AI</span>
+        <span class="card-source">Neurosciencenews</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.1</span></span>
+      </div>
+      <div class="card-title"><a href="https://neurosciencenews.com/ai-internal-world-models-understanding-30581/" target="_blank" rel="noopener">AI「脳状態」が現実をいかにデコードするか</a></div>
+      <div class="card-hashtags"><span class="hashtag">#ニューロモーフィック</span><span class="hashtag">#AI認知科学</span><span class="hashtag">#説明可能AI</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">新たな研究により、20億パラメータ以上を持つAIモデルが、数学的な「脳状態」を発展させ、可能な事象と不可能な事象を区別していることが明らかになった。この発見は、AIが人間の認知プロセスに類似した抽象的な世界モデルを構築していることを示唆している。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">生成AI・大規模言語モデルの意思決定メカニズムが、生物学的脳のモデル化に近づいていることは、AIエージェント化時代の説明可能性と信頼性確保に直結する。組織でのAI導入時に、そのモデル内部の「論理構造」を理解することで、判断ミスの予防と改善サイクルが加速する。</div>
+      <div class="card-footer"><span class="card-date">2026-04-23 06:52</span><a class="read-link" href="https://neurosciencenews.com/ai-internal-world-models-understanding-30581/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 社会実装</span>
+        <span class="card-source">Nature</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="impact-val">4.1</span></span>
+      </div>
+      <div class="card-title"><a href="https://www.nature.com/articles/s42256-026-01217-9" target="_blank" rel="noopener">LLMの過信と過度な不信の背景にある競合バイアス</a></div>
+      <div class="card-hashtags"><span class="hashtag">#LLM認知バイアス</span><span class="hashtag">#AI意思決定</span><span class="hashtag">#人間-AI協働</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">大規模言語モデル（LLM）の信頼度は、初期回答を支持するバイアスと矛盾する情報への過度な重み付けという2つの競合バイアスによって形成され、最適なベイズ推論から逸脱していることが明らかになりました。この発見は、LLMベースの意思決定支援システムが陥りやすい論理的矛盾を初めて定量化したものです。組織や個人がAIの出力を過信・過度に不信するジレンマの科学的根拠が示され、人間とAIの協働設計に重要な示唆を与えます。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">LLMを社内意思決定支援ツールとして導入する際、このバイアス特性を認識することで、AIの提案に対する人間の検証プロセスを設計できます。具体的には、AIが示す初期案には懐疑的に、その後の反論には慎重に対応する『二重検証フレーム』を組織に埋め込み、判断の質を向上させつつ過度な依存を防ぐことが可能になります。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 09:00</span><a class="read-link" href="https://www.nature.com/articles/s42256-026-01217-9" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 社会実装</span>
+        <span class="card-source">Techcrunch</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.8</span></span>
+      </div>
+      <div class="card-title"><a href="https://techcrunch.com/2026/04/22/google-updates-workspace-to-make-ai-your-new-office-intern/" target="_blank" rel="noopener">GoogleがWorkspaceを更新し、AIを新しいオフィスインターンに——Workspace Intelligenceの導入</a></div>
+      <div class="card-hashtags"><span class="hashtag">#生産性向上</span><span class="hashtag">#AI自動化</span><span class="hashtag">#オフィスワーク</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">GoogleはWorkspace Intelligenceという新しいAIシステムを駆動する自動化機能をWorkspaceに導入した。これにより、ナレッジ作成、データ分析、タスク管理などの日常的なオフィス業務をAIが代行・支援する環境が実現される。オフィスワーカーの生産性向上と定型業務の自動化が急速に進む可能性が高い。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">Workspace Intelligence により、ドキュメント作成・メール対応・スケジュール管理などの定型業務をAIエージェントが自動実行できる環境が整う。企業は個別の業務フローをAIに学習させることで、人間は高度な判断・創造業務に専念できるワークフロー設計への転換が急務となる。</div>
+      <div class="card-footer"><span class="card-date">2026-04-23 07:44</span><a class="read-link" href="https://techcrunch.com/2026/04/22/google-updates-workspace-to-make-ai-your-new-office-intern/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · プレス</span>
+        <span class="card-source">Openai</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.8</span></span>
+      </div>
+      <div class="card-title"><a href="https://openai.com/index/speeding-up-agentic-workflows-with-websockets" target="_blank" rel="noopener">WebSocketとレスポンスAPIでエージェントワークフロー高速化——遅延削減と効率化</a></div>
+      <div class="card-hashtags"><span class="hashtag">#レスポンス最適化</span><span class="hashtag">#エージェント高速化</span><span class="hashtag">#API効率化</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">OpenAIのCodexエージェントループにWebSocketと接続スコープキャッシング機能を導入し、API通信オーバーヘッド削減とモデル応答遅延の大幅改善を実現。エージェント化アーキテクチャの実装効率が飛躍的に向上。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">エージェント化による複数API呼び出しの遅延が技術的に解決されたことで、リアルタイム性が要求される業務（カスタマーサポート・リアルタイム意思決定）への応用が現実的になる。インフラ面での制約が減り、ユースケース拡張が加速。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 19:00</span><a class="read-link" href="https://openai.com/index/speeding-up-agentic-workflows-with-websockets" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 社会実装</span>
+        <span class="card-source">Techcrunch</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.7</span></span>
+      </div>
+      <div class="card-title"><a href="https://techcrunch.com/2026/04/22/google-turns-chrome-into-an-ai-coworker-for-the-workplace/" target="_blank" rel="noopener">GoogleがChromeをAI協働者化——Gemini搭載「自動ブラウジング」でエンタープライズユーザーの定型業務を自動化</a></div>
+      <div class="card-hashtags"><span class="hashtag">#ブラウザ自動化</span><span class="hashtag">#エージェント化</span><span class="hashtag">#生産性</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">GoogleはChrome向けにGemini駆動の「自動ブラウジング（auto browse）」機能をエンタープライズ向けに提供開始した。リサーチ、データ入力、情報収集などの日常的なブラウザ操作を自動化でき、ホワイトカラー業務の反復作業を大幅に削減できる。ブラウザをAIエージェントの実行基盤として組み込む動きが標準化される兆候。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">Chromeの自動ブラウジング機能により、市場調査・データ収集・報告書作成などのリサーチ業務がワンクリックで完結する環境が形成される。企業は業務フローの中で「人間にしかできない判断・クリエイティブ」をボトルネック視して、組織設計と育成体系の根本見直しが必要になる。</div>
+      <div class="card-footer"><span class="card-date">2026-04-23 02:30</span><a class="read-link" href="https://techcrunch.com/2026/04/22/google-turns-chrome-into-an-ai-coworker-for-the-workplace/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 社会実装</span>
+        <span class="card-source">Openai</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.5</span></span>
+      </div>
+      <div class="card-title"><a href="https://openai.com/index/making-chatgpt-better-for-clinicians" target="_blank" rel="noopener">ChatGPTを臨床医向けに最適化——米国医師・看護師・薬剤師に無料提供</a></div>
+      <div class="card-hashtags"><span class="hashtag">#医療AI</span><span class="hashtag">#業務効率化</span><span class="hashtag">#専門職支援</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">OpenAIが米国の認定医師・看護師・薬剤師向けにChatGPTを無料提供し、臨床記録作成・医療文書作成・臨床研究をサポート。医療専門家の業務効率化と患者ケア質向上に直結する実装例。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">医療現場の文書作成・患者記録管理・臨床判断補助の効率化により、医師の非臨床業務負荷を軽減し、患者との対面時間を増やせる可能性がある。同様の専門職向けAI最適化は法務・会計・研究など他分野でも応用価値が高い。</div>
+      <div class="card-footer"><span class="card-date">2026-04-23 00:00</span><a class="read-link" href="https://openai.com/index/making-chatgpt-better-for-clinicians" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 学術</span>
+        <span class="card-source">Arxiv</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.5</span></span>
+      </div>
+      <div class="card-title"><a href="https://arxiv.org/abs/2604.18873" target="_blank" rel="noopener">自然言語から実行可能なナース言語へ：推論のための神経シンボリックベンチマークとパイプライン</a></div>
+      <div class="card-hashtags"><span class="hashtag">#神経シンボリック</span><span class="hashtag">#推論の透明性</span><span class="hashtag">#形式検証</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">LLM は言語生成に優れているが、明示的なシンボリック構造を必要とする推論や多段階推論、解釈可能な不確実性処理では信頼性が低い。本論文は、自然言語推論問題を形式的表現（NARS）に変換する神経シンボリックフレームワークを提案し、推論の透明性と堅牢性を向上させる。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">神経シンボリックアプローチは、LLM の創造性とシンボリックシステムの厳密性を融合させるアーキテクチャである。企業の意思決定支援システムやコンプライアンス審査自動化では、推論ロジックの監査可能性が不可欠であり、このフレームワークはそうした領域での採用が加速する可能性がある。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 13:00</span><a class="read-link" href="https://arxiv.org/abs/2604.18873" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">組織人事 · 研究</span>
+        <span class="card-source">Frontiersin</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.5</span></span>
+      </div>
+      <div class="card-title"><a href="https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1813978" target="_blank" rel="noopener">ホスピタリティ業界におけるウェルビーイング促進：自律支援的リーダーシップ、心理的ニーズ充足、組織支援認知の相互作用</a></div>
+      <div class="card-hashtags"><span class="hashtag">#自律支援リーダーシップ</span><span class="hashtag">#感情労働</span><span class="hashtag">#ウェルビーイング</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">本研究は、自律支援的リーダーシップ（ASL）が高需要環境であるホスピタリティ業界の従業員のウェルビーイングを高める仕組みを、心理的ニーズ充足の仲介メカニズムと境界条件を含めて実証している。従来の研究では関連性が認識されながらも、特にホスピタリティのような感情労働が高い環境での実装メカニズムが不十分であった。この知見は、高ストレス職場における心理的安全性と自律性のバランス設計に実践的指針を提供する。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">ホスピタリティ業界に限らず、カスタマーサービスやコールセンター、営業といった感情労働が高い職場のマネジャー育成では、従来の「結果管理」型から「自律支援型」への転換が必須である。特に心理的ニーズ（自律性・能力感・関係性）の充足を構造的に設計することで、バーンアウト予防と顧客満足度の向上が同時実現できる可能性が高い。組織支援認知（会社が自分を支援していると感じる環境）の醸成が加速因子となることから、制度設計と上司の日常的行動の一貫性が重要である。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 09:00</span><a class="read-link" href="https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1813978" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 社会実装</span>
+        <span class="card-source">Techcrunch</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.3</span></span>
+      </div>
+      <div class="card-title"><a href="https://techcrunch.com/2026/04/22/ai-is-spitting-out-more-potential-drugs-than-ever-this-start-up-wants-to-figure-out-which-ones-matter/" target="_blank" rel="noopener">10x Scienceが480万ドル調達——AI創出医薬候補化合物の有効性判定ツール</a></div>
+      <div class="card-hashtags"><span class="hashtag">#創薬AI</span><span class="hashtag">#分子探索</span><span class="hashtag">#R&D効率化</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">10x ScienceがシードラウンドにおいてAI支援薬物探索を専門とするプラットフォームに480万ドルを調達。AI生成の膨大な医薬候補化合物のうち、実際に有望な分子を識別する課題を解決し、創薬開発の効率化を実現する。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">AI×専門領域の垂直統合モデルの成長段階。生成AIの生産性ブースト効果と専門領域知識の融合により、創薬企業における研究投資ROIが向上。組織内で「AIスクリーニング専門チーム」の編成が一般化する可能性がある。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 22:00</span><a class="read-link" href="https://techcrunch.com/2026/04/22/ai-is-spitting-out-more-potential-drugs-than-ever-this-start-up-wants-to-figure-out-which-ones-matter/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">脳科学 · プレス</span>
+        <span class="card-source">Neurosciencenews</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.2</span></span>
+      </div>
+      <div class="card-title"><a href="https://neurosciencenews.com/smoothened-learning-behavioral-flexibility-30582/" target="_blank" rel="noopener">胎児期の信号経路が成人期の心の柔軟性を調整している</a></div>
+      <div class="card-hashtags"><span class="hashtag">#発達脳科学</span><span class="hashtag">#神経可塑性</span><span class="hashtag">#組織適応力</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">研究者らは脳発達時に使用される信号経路が、成人期に再利用され、行動の継続性と柔軟性のバランスを取っていることを発見した。この知見は学習と意思決定の神経基盤を理解する上で重要であり、発達段階での脳機能が生涯のパフォーマンスに影響することを示唆している。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">組織開発や人材育成の観点から、従業員の学習習慣や適応能力は「柔軟性と継続性のバランス」が鍵となることが神経生物学的に実証された。マネジメント層が部下の挑戦と安定性の両面をサポートすることで、組織の適応力とレジリエンスが高まる可能性がある。</div>
+      <div class="card-footer"><span class="card-date">2026-04-23 07:14</span><a class="read-link" href="https://neurosciencenews.com/smoothened-learning-behavioral-flexibility-30582/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">脳科学 · プレス</span>
+        <span class="card-source">Neurosciencenews</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.2</span></span>
+      </div>
+      <div class="card-title"><a href="https://neurosciencenews.com/tourette-insular-motor-circuit-30574/" target="_blank" rel="noopener">トゥレット症とOCDが共通の神経経路を共有——脳の『橋』が症状強度を制御</a></div>
+      <div class="card-hashtags"><span class="hashtag">#神経精神医学</span><span class="hashtag">#トゥレット症</span><span class="hashtag">#神経回路</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">研究者らは運動皮質と島皮質を接続する脳の『橋』を発見し、これがトゥレット症のチック強度と感情症状の両方を制御していることを明らかにした。この共通経路の特定により、これまで独立と考えられていた神経障害が実は関連していることが示された。この知見は新しい治療標的の開発や、神経精神疾患の統合的理解につながる可能性を持つ。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">神経障害の根本的メカニズム理解が進むことで、職場のメンタルヘルス施策や神経発達症・神経精神疾患への組織的対応がより科学的根拠に基づくものになる。特に、チック症やOCD傾向のある従業員への環境調整や支援プログラム設計において、単なる行動改善ではなく、神経生理的なメカニズムを踏まえたアプローチが可能になる。</div>
+      <div class="card-footer"><span class="card-date">2026-04-23 02:46</span><a class="read-link" href="https://neurosciencenews.com/tourette-insular-motor-circuit-30574/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 学術</span>
+        <span class="card-source">Arxiv</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.2</span></span>
+      </div>
+      <div class="card-title"><a href="https://arxiv.org/abs/2604.18916" target="_blank" rel="noopener">MedMNIST データセットのエラーフリー学習</a></div>
+      <div class="card-hashtags"><span class="hashtag">#医療AI</span><span class="hashtag">#エラーフリー学習</span><span class="hashtag">#再現性</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">本論文は「人工特殊知能」という新概念を導入し、機械学習モデルが分類問題において繰り返しミスを犯さないエラーフリー学習を実現する方法論を提案する。18 個の MedMNIST バイオメディカルデータセットに適用され、データセット品質の問題を除き有効性を示す。医療 AI の信頼性向上に向けた重要なステップである。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">医療診断支援 AI では、単なる精度向上だけでなく、同一パターンの繰り返しエラーを完全に排除することが臨床導入の必要条件である。本手法の適用により、医療機関が AI モデルを採用する際の監査・検証プロセスが簡素化され、規制承認の加速が期待できる。特に、低リソース医療施設での導入障壁低減に寄与する可能性がある。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 13:00</span><a class="read-link" href="https://arxiv.org/abs/2604.18916" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · プレス</span>
+        <span class="card-source">Openai</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.2</span></span>
+      </div>
+      <div class="card-title"><a href="https://openai.com/index/introducing-openai-privacy-filter" target="_blank" rel="noopener">OpenAI プライバシーフィルター発表：テキスト内の個人識別情報検出・マスキング最新モデル</a></div>
+      <div class="card-hashtags"><span class="hashtag">#プライバシー保護</span><span class="hashtag">#生成AI導入リスク</span><span class="hashtag">#データガバナンス</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">OpenAIが個人識別情報（PII）を検出・自動マスキングするオープンウェイトモデルを発表した。テキスト内の氏名、住所、メールアドレスなどを最先端精度で検出可能。企業のデータガバナンス・コンプライアンス、特に生成AI導入時のPII漏洩リスク低減に即座に活用できる。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">生成AIを顧客データ・社員情報を含むドキュメント処理に導入する際、このフィルターをプリプロセスステップに組み込むことで法的リスク・信頼喪失を未然防止できる。LLMのRAG・ファインチューニングパイプラインに統合し、センシティブ情報の学習データ汚染を防ぐ直接的なアクション。オープンウェイト化により、オンプレミス環境や機密情報厳格企業でも導入可能な点が業務自動化の民主化につながる。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 09:00</span><a class="read-link" href="https://openai.com/index/introducing-openai-privacy-filter" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">脳科学 · プレス</span>
+        <span class="card-source">Neurosciencenews</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.1</span></span>
+      </div>
+      <div class="card-title"><a href="https://neurosciencenews.com/white-matter-myelin-neurodegeneration-30573/" target="_blank" rel="noopener">白質損傷が遠隔の灰白質喪失を引き起こす——ミエリン再生による可逆性を確認</a></div>
+      <div class="card-hashtags"><span class="hashtag">#脳神経可塑性</span><span class="hashtag">#ミエリン再生</span><span class="hashtag">#神経リハビリ</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">研究者が局所的な白質損傷が脳の遠い領域の灰白質喪失を誘発するメカニズムを発見し、さらにミエリン再生により損傷が可逆的であることを実証した。これは神経ネットワークの相互依存性を示す重要な証拠であり、脳損傷後のリハビリテーションや神経変性疾患の治療における新しい視点を提供する。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">脳の領域間相互依存性と可逆性の理解は、脳卒中後のリハビリテーション戦略やストレス関連の神経生理的変化への組織的対応を科学的に設計する際の基盤になる。また、職場の高ストレス環境が引き起こす『遠隔神経損傷』的現象（一部の過度な負荷が全体的な認知機能低下をもたらすメカニズム）を理解する上での重要な示唆を与える。</div>
+      <div class="card-footer"><span class="card-date">2026-04-23 02:23</span><a class="read-link" href="https://neurosciencenews.com/white-matter-myelin-neurodegeneration-30573/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">AI · 社会実装</span>
+        <span class="card-source">Techcrunch</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">3.1</span></span>
+      </div>
+      <div class="card-title"><a href="https://techcrunch.com/2026/04/22/ai-overviews-are-coming-to-your-gmail-at-work/" target="_blank" rel="noopener">AI Overviewsが企業向けGmailに統合——複数メール横断の即座の要約機能</a></div>
+      <div class="card-hashtags"><span class="hashtag">#業務効率化</span><span class="hashtag">#メール自動化</span><span class="hashtag">#認知負荷軽減</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">GoogleがAI Overviews機能を企業向けGmailに導入。複数メールからの自動要約を提供し、情報検索・整理の効率化を実現する。これにより情報過多時代のメール管理が大幅に効率化され、スタッフの認知負荷が低下する。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">ナレッジワーカーの時間解放に直結する実装。日々のメール処理時間を15-20%削減できる可能性があり、組織の知識基盤整備やミーティング時間確保に対する投資効果が定量化しやすい。早期導入組織は競争優位を獲得。</div>
+      <div class="card-footer"><span class="card-date">2026-04-23 01:46</span><a class="read-link" href="https://techcrunch.com/2026/04/22/ai-overviews-are-coming-to-your-gmail-at-work/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">心理 · 認知</span>
+        <span class="card-source">Frontiersin</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">2.9</span></span>
+      </div>
+      <div class="card-title"><a href="https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1784775" target="_blank" rel="noopener">大学生のアカデミック・ストレス・プロフィールと寝坊前の先延ばし：反芻の媒介効果と知覚ストレスの調整効果</a></div>
+      <div class="card-hashtags"><span class="hashtag">#アカデミック・ストレス</span><span class="hashtag">#睡眠と先延ばし</span><span class="hashtag">#反芻思考</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">従来の変数中心的アプローチでは隠れる個人間の異質性に着目し、person-centered視点でアカデミック・ストレスの潜在的なパターンを特定する。これらストレス・プロフィールが睡眠前の先延ばし行動に至るまでの心理メカニズム、特に反芻思考と知覚ストレスの役割を明らかにしている。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">学生のメンタルヘルス対応や組織研修プログラムの設計時に、ストレス反応の多様なパターンを認識できる。同じストレッサー環境でも、反芻傾向や知覚ストレスの程度によって介入のポイントが異なることを示唆しており、One-Size-Fits-Allではなくセグメント別の対策設計が有効であることが期待できる。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 09:00</span><a class="read-link" href="https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1784775" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">脳科学 × AI</span>
+        <span class="card-source">Arxiv</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">2.8</span></span>
+      </div>
+      <div class="card-title"><a href="https://arxiv.org/abs/2510.12751" target="_blank" rel="noopener">認知正常な高齢者コホートにおけるアミロイドβと静止状態機能ネットワークの非線形関連性および認知関連性</a></div>
+      <div class="card-hashtags"><span class="hashtag">#アルツハイマー病予防</span><span class="hashtag">#脳ネットワーク早期診断</span><span class="hashtag">#加齢と認知機能</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">認知正常な高齢者を対象とした大規模コミュニティ研究で、アミロイドβが脳ネットワーク接続に及ぼす非線形的変化がアルツハイマー病の早期神経署名である可能性を示唆しています。これまでの研究と異なり、多様な参加者背景から得られた大規模データを用いることで、アルツハイマー病病理に伴う初期ネットワーク脆弱性の理解が進みます。認知正常でも脳画像異常がある段階での介入可能性を示すため、臨床的・予防的価値があります。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">この研究知見は、健常者検診時の脳ネットワーク異常検出とリスク層別化に応用でき、早期介入プログラムの対象者選定基準として機能させることで、予防的な組織人事施策（認知機能低下リスクのある社員への配置・業務調整）の根拠となりうります。また、加齢に伴う認知機能変化の個人差予測に用いることで、キャリア開発計画やジョブデザインの個別最適化が可能になります。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 13:00</span><a class="read-link" href="https://arxiv.org/abs/2510.12751" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">心理 · 認知</span>
+        <span class="card-source">Frontiersin</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">2.8</span></span>
+      </div>
+      <div class="card-title"><a href="https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1757506" target="_blank" rel="noopener">文化的フィクションと予測的・感情的シミュレーション：男性の感情制御とジェンダー暴力防止の神経認知モデル</a></div>
+      <div class="card-hashtags"><span class="hashtag">#感情制御</span><span class="hashtag">#ジェンダー暴力防止</span><span class="hashtag">#神経認知</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">本研究は、感情的受容性の理論と脳の予測処理モデルを統合し、ジェンダーベースの暴力とその予防の感情メカニズムを神経認知的に解明する枠組みを提示している。従来の社会学的・イデオロギー的説明では説明できないフェミサイドの根底にある感情制御プロセスに焦点を当てることで、予防的介入の新たな視点を提供する。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">男性の感情制御パターンと暴力性向の神経認知的メカニズムを理解することで、学校教育や組織研修における感情スキル・共感トレーニングの設計に活かせる。特に無意識的なバイアスや感情抑制パターンを認識させ、予測的思考能力を高めるプログラム開発の基礎となる可能性がある。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 09:00</span><a class="read-link" href="https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1757506" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">心理 · 認知</span>
+        <span class="card-source">Neurosciencenews</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">2.5</span></span>
+      </div>
+      <div class="card-title"><a href="https://neurosciencenews.com/pretend-play-mental-health-30580/" target="_blank" rel="noopener">早期の想像遊びが良好なメンタルヘルスを予測する</a></div>
+      <div class="card-hashtags"><span class="hashtag">#心理的安全性</span><span class="hashtag">#脳発達</span><span class="hashtag">#組織文化</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">1,400人の子どもを対象とした縦断研究により、早期のごっこ遊びが改善されたメンタルヘルスの成果に関連していることが明らかになった。この結果は、遊びが脳のレジリエンスを構築するメカニズムを示唆している。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">組織研修やチームビルディングにおいて、「創造的・開放的な思考の場」を意図的に組み込むことで、従業員の心理的安全性とストレス耐性が向上する可能性がある。特にリーダーシップ育成プログラムに遊び心や試行錯誤の許容文化を取り入れることで、長期的な組織メンタルヘルスが改善する。</div>
+      <div class="card-footer"><span class="card-date">2026-04-23 06:32</span><a class="read-link" href="https://neurosciencenews.com/pretend-play-mental-health-30580/" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">組織人事 · 研究</span>
+        <span class="card-source">Plos</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">2.5</span></span>
+      </div>
+      <div class="card-title"><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0347684" target="_blank" rel="noopener">段階応答モデルのサンプルサイズ要件に関するモンテカルロシミュレーション研究</a></div>
+      <div class="card-hashtags"><span class="hashtag">#尺度開発</span><span class="hashtag">#サンプルサイズ設計</span><span class="hashtag">#心理測定</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">心理測定における段階応答モデル（GRM）の適用拡大に伴い、サンプルサイズ推奨値（COSMIN基準など）の多くが経験的検証ではなく専門家合意に基づいている。本研究はモンテカルロシミュレーションを用いて、GRMの信頼できるパラメータ推定と尺度開発に必要なサンプルサイズの実証的基準を明らかにする。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">組織人事の採用試験や適性評価、エンゲージメント調査など、リッカート尺度を用いた測定を行う際、統計的に信頼性のあるサンプルサイズ設定が可能になる。特にスタートアップや中堅企業で人数制約がある場合、本研究の実証基準により効率的かつ科学的な調査設計ができる。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 23:00</span><a class="read-link" href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0347684" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+    <article class="card">
+      <div class="card-meta">
+        <span class="card-tag">組織人事 · 研究</span>
+        <span class="card-source">Frontiersin</span>
+        <span class="impact-stars"><span class="star filled">★</span><span class="star filled">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="impact-val">2.3</span></span>
+      </div>
+      <div class="card-title"><a href="https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1788167" target="_blank" rel="noopener">学業的自尊心と大学生のポジティブな心理的特性の関連：一般的自己効力感の仲介役</a></div>
+      <div class="card-hashtags"><span class="hashtag">#自己効力感</span><span class="hashtag">#大学生適応</span><span class="hashtag">#組織研修設計</span></div>
+      <div class="section-label-summary">Abstract</div>
+      <p class="card-summary">本研究は、大学生の学業的自尊心がポジティブな心理的特性に与える影響を、一般的自己効力感の仲介効果を考慮して検証している。従来の研究では幸福度に影響する様々な心理要因が焦点化されてきたが、学業的自尊心の特定の役割、特に仲介メカニズムに関する研究は限定的である。この知見は、大学生のウェルビーイング向上のための教育介入設計に実践的示唆を提供する可能性がある。</p>
+      <div class="section-label-insight">Insight</div>
+      <div class="card-insight">採用試験や配属後の適応支援において、単なる一般的自己効力感ではなく、学業的自尊心（＝過去の学習成果の内在化）を測定・育成することで、より安定した職場適応と心理的回復力を構築できる可能性がある。組織研修設計では、新入社員の初期成功体験を意図的に設計し、学業的自尊心に相当する「職業的自尊心」を早期に確立させるアプローチが有効と考えられる。</div>
+      <div class="card-footer"><span class="card-date">2026-04-22 09:00</span><a class="read-link" href="https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1788167" target="_blank" rel="noopener">原文 →</a></div>
+    </article>
+    
+  </div>
+</body>
+</html>
