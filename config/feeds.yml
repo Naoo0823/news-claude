@@ -1,16 +1,7 @@
 categories:
 
   # ── AI ────────────────────────────────────────────────────────────────────
-  - name: AI社会実装・ビジネス
-    feeds:
-      - url: https://techcrunch.com/category/artificial-intelligence/feed/
-        lang: en
-      - url: https://venturebeat.com/category/ai/feed/
-        lang: en
-      - url: https://www.technologyreview.com/feed/
-        lang: en
-
-  - name: AIメーカー・プレスリリース
+  - name: AIプロダクト速報
     feeds:
       - url: https://openai.com/blog/rss.xml
         lang: en
@@ -18,15 +9,21 @@ categories:
         lang: en
       - url: https://huggingface.co/blog/feed.xml
         lang: en
+      - url: https://blog.google/technology/ai/rss/
+        lang: en
 
-  - name: AI学術研究・最新論文
+  - name: AIビジネス活用事例
     feeds:
-      - url: http://arxiv.org/rss/cs.AI
+      - url: https://techcrunch.com/category/artificial-intelligence/feed/
         lang: en
-      - url: http://arxiv.org/rss/cs.LG
+      - url: https://venturebeat.com/category/ai/feed/
         lang: en
-      - url: http://arxiv.org/rss/stat.ML
+      - url: https://www.technologyreview.com/feed/
         lang: en
+      - url: https://zenn.dev/topics/ai/feed
+        lang: ja
+      - url: https://qiita.com/tags/ai/feed
+        lang: ja
 
   # ── 脳科学 ──────────────────────────────────────────────────────────────
   - name: 脳科学・社会実装
@@ -50,19 +47,51 @@ categories:
       - url: https://journals.plos.org/plosone/feed/atom
         lang: en
 
-  - name: 脳科学研究・心理組織
+  - name: 脳科学研究・心理認知
     feeds:
       - url: https://www.frontiersin.org/journals/psychology/rss
         lang: en
       - url: https://www.science.org/action/showFeed?type=etoc&feed=rss&jc=science
         lang: en
 
-  # ── 脳科学×AI ─────────────────────────────────────────────────────────
-  - name: 脳科学×AI
+  # ── 他社リサーチ ─────────────────────────────────────────────────────────
+  - name: 競合プレスリリース
     feeds:
-      - url: https://www.nature.com/natmachintell/rss/current
+      # 組織人事コンサル（URL は要確認）
+      - url: https://www.mercer.com/en-us/about/newsroom/rss
         lang: en
-      - url: http://arxiv.org/rss/q-bio.NC
+        group: org_hr_consulting
+      - url: https://www.kornferry.com/insights/feed
         lang: en
-      - url: https://www.nature.com/neuro/rss/current
+        group: org_hr_consulting
+      # 総合・戦略コンサル
+      - url: https://www.mckinsey.com/rss/new-research-and-insights.xml
+        lang: en
+        group: strategy_consulting
+      - url: https://www.bcg.com/rss/insights.xml
+        lang: en
+        group: strategy_consulting
+      # HRテック
+      - url: https://blog.workday.com/en-us/rss.xml
+        lang: en
+        group: hr_tech
+      - url: https://www.hrexecutive.com/feed/
+        lang: en
+        group: hr_tech
+      # 人材紹介（URL は要確認）
+      - url: https://www.linkedin.com/blog/engineering/rss
+        lang: en
+        group: talent_recruitment
+      # 研修・教育（URL は要確認）
+      - url: https://www.coursera.org/blog/feed
+        lang: en
+        group: training_education
+
+  - name: 業界・市場トレンド
+    feeds:
+      - url: https://www.shrm.org/rss/pages/all.aspx
+        lang: en
+      - url: https://hbr.org/rss/managing-yourself
+        lang: en
+      - url: https://hbr.org/rss/topic/human-resource-management
         lang: en

@@ -15,12 +15,11 @@ load_dotenv()
 
 from fetch import fetch_all
 from process import process_all
-from generate import generate_html, generate_archive_page, generate_archive_index
+from generate import generate_html
 
-CONFIG_PATH  = os.path.join(os.path.dirname(__file__), "..", "config", "feeds.yml")
-OUTPUT_PATH  = os.path.join(os.path.dirname(__file__), "..", "docs", "index.html")
-CACHE_DIR    = os.path.join(os.path.dirname(__file__), "..", "cache")
-ARCHIVE_DIR  = os.path.join(os.path.dirname(__file__), "..", "docs", "archive")
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "config", "feeds.yml")
+OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "docs", "index.html")
+CACHE_DIR   = os.path.join(os.path.dirname(__file__), "..", "cache")
 
 
 def _category_names() -> dict:
@@ -44,8 +43,6 @@ def main() -> None:
         category_input = _category_names()
         processed = process_all(category_input, dry_run=True)
         generate_html(processed, output_path=OUTPUT_PATH, cache_dir=CACHE_DIR)
-        generate_archive_page(processed, archive_dir=ARCHIVE_DIR)
-        generate_archive_index(archive_dir=ARCHIVE_DIR)
         print("完了しました（APIは呼んでいません）。")
         return
 
@@ -65,10 +62,6 @@ def main() -> None:
 
     print("=== Step 3: HTML 生成 ===")
     generate_html(processed, output_path=OUTPUT_PATH, cache_dir=CACHE_DIR)
-
-    print("=== Step 4: アーカイブ生成 ===")
-    generate_archive_page(processed, archive_dir=ARCHIVE_DIR)
-    generate_archive_index(archive_dir=ARCHIVE_DIR)
 
     print("\n完了しました。")
 

@@ -10,13 +10,14 @@ import feedparser
 import yaml
 
 
-class Article(TypedDict):
+class Article(TypedDict, total=False):
     title: str
     url: str
     description: str
-    published: str  # ISO 8601
-    lang: str       # "ja" or "en"
+    published: str   # ISO 8601
+    lang: str        # "ja" or "en"
     category: str
+    group: str       # 競合グループ識別子（競合プレスリリース用）
 
 
 def _parse_entry_time(entry: feedparser.FeedParserDict) -> datetime | None:
@@ -45,16 +46,15 @@ def fetch_category(category_name: str, feeds: list[dict], hours: int = 24) -> li
     for feed_cfg in feeds:
         url: str = feed_cfg["url"]
         lang: str = feed_cfg.get("lang", "en")
+        group: str = feed_cfg.get("group", "")
 
         parsed = feedparser.parse(url)
         if parsed.bozo and not parsed.entries:
-            # フィード取得失敗はスキップ（ログだけ出す）
             print(f"[fetch] WARN: failed to parse {url}")
             continue
 
         for entry in parsed.entries:
             pub_dt = _parse_entry_time(entry)
-            # 日時が取得できない記事は「直近」とみなして含める
             if pub_dt is not None and pub_dt < cutoff:
                 continue
 
@@ -69,21 +69,19 @@ def fetch_category(category_name: str, feeds: list[dict], hours: int = 24) -> li
             if not title or not url_article:
                 continue
 
-            articles.append(
-                Article(
-                    title=title,
-                    url=url_article,
-                    description=description,
-                    published=published,
-                    lang=lang,
-                    category=category_name,
-                )
-            )
+            article: Article = {
+                "title":       title,
+                "url":         url_article,
+                "description": description,
+                "published":   published,
+                "lang":        lang,
+                "category":    category_name,
+                "group":       group,
+            }
+            articles.append(article)
 
-        # レートリミット回避
         time.sleep(0.5)
 
-    # 新しい順にソートし、上限10件に制限
     articles.sort(key=lambda a: a["published"], reverse=True)
     return articles[:10]
 
