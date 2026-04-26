@@ -160,7 +160,7 @@ COMPETITOR_DIRECTORY: list[tuple[str, list[tuple[str, str]]]] = [
         ("カオナビ",   "https://kaonavi.jp/"),
         ("HRBrain",    "https://www.hrbrain.jp/"),
         ("ワークデイ", "https://www.workday.com/ja-jp/"),
-        ("ワークスHI", "https://www.works-hi.co.jp/corporate"),
+        ("Works Human Intelligence（WHI）", "https://www.works-hi.co.jp/corporate"),
     ]),
     ("人材紹介・採用", [
         ("リクルートホールディングス", "https://www.recruit.co.jp/"),
@@ -182,6 +182,10 @@ COMPETITOR_DIRECTORY: list[tuple[str, list[tuple[str, str]]]] = [
         ("Sansan",              "https://jp.sansan.com/"),
         ("マネーフォワード",    "https://corp.moneyforward.com/"),
         ("DeNA",                "https://dena.com/jp/"),
+    ]),
+    ("シンクタンク・研究機関", [
+        ("パーソル総合研究所",       "https://rc.persol-group.co.jp/"),
+        ("リクルートワークス研究所", "https://www.works-i.com/"),
     ]),
 ]
 
