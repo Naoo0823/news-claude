@@ -1283,8 +1283,9 @@ def generate_html(
     non_hot = [a for a in all_articles if a["url"] not in hot_url_set]
 
     # パネルデータ構築
+    # サブタブは hot 記事も含む全記事から引く（non_hot 除外は All タブ専用）
     def _ft(cat_keys: list[str], limit: int = TIMELINE_MAX_PER_TAB) -> list[dict]:
-        return _filter_and_group(non_hot, cat_keys, limit)
+        return _filter_and_group(all_articles, cat_keys, limit)
 
     panels = {
         "all": {
