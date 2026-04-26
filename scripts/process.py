@@ -145,17 +145,21 @@ LMへのこじつけを避け、業界全体の地殻変動や市場構造の変
 ・戦略的示唆：他社が狙う市場の隙間や、この動向が業界のEPSやPERにどう作用するか。
 ・LM視点（条件付き）：記事の内容がLMの事業領域（組織開発・モチベーション・人的資本・採用・HRテック等）と明確に接点を持つ場合に限り、その接点を1文で補足せよ。接点が薄い・なければ省略すること。
 
-3.【impact_axes】: 以下の3軸を1.0〜5.0（0.1刻み）で厳格に評価せよ。
+3.【スコア（3軸）】: 以下の3軸をそれぞれ独立したトップレベルキーとして1.0〜5.0（0.1刻み）で厳格に評価せよ。
 ・per (PER & Social Impact): 大手ベンダーの重大発表や、社会・市場の期待値（PER）を押し上げる重大なニュースか。
 ・sci (Utility & Curiosity): 実務に使えるTips（Qiita/note等）としての有用性、あるいは知的好奇心を強烈に刺激する内容か。
 ・cps (Transformative Potential): 既存の組織運営、ビジネスモデル、あるいは人間の働き方を根本から変えるポテンシャルがあるか。
 
 4.【impact】: (per + sci + cps) / 3 の単純平均（小数点第1位まで）。
 
-5.【hashtags】: 記事テーマを端的に表す日本語ハッシュタグを3つ生成。
+5.【hashtags】: 記事の本質を突く日本語ハッシュタグを3つ生成せよ。
+・このタグは関連記事レコメンドエンジンが参照する「紐付けキー」として機能する。
+・タグ同士は意味が重複しないよう、「技術領域」「応用分野」「社会的文脈」など異なる切り口で選べ。
+・例: #生成AI（技術領域）× #採用DX（応用分野）× #人的資本経営（社会的文脈）
 
 ━━ 鉄則 ━━
 ・出力に引用番号（cite等）は一切含めないこと。
+・per / sci / cps は必ずトップレベルキーとして出力すること（impact_axes へのネストは不可）。
 ・出力は以下のJSON配列形式のみを厳守し、説明文やコードブロック（```等）は一切不要。
 
 [
@@ -164,7 +168,9 @@ LMへのこじつけを避け、業界全体の地殻変動や市場構造の変
     "summary": "...",
     "insight": "...",
     "impact": 0.0,
-    "impact_axes": {"per": 0.0, "sci": 0.0, "cps": 0.0},
+    "per": 0.0,
+    "sci": 0.0,
+    "cps": 0.0,
     "hashtags": ["#タグ1", "#タグ2", "#タグ3"]
   }
 ]
@@ -781,15 +787,17 @@ def _parse_article(original: Article, item: dict, screen: dict,
     except (TypeError, ValueError):
         impact = 3.0
 
+    # トップレベルキー（新形式）を優先し、なければ impact_axes ネスト（旧形式）にフォールバック
     axes_raw = item.get("impact_axes") or {}
-    try:
-        axes = {
-            "per": round(max(0.0, min(5.0, float(axes_raw.get("per", 0.0)))), 1),
-            "sci": round(max(0.0, min(5.0, float(axes_raw.get("sci", 0.0)))), 1),
-            "cps": round(max(0.0, min(5.0, float(axes_raw.get("cps", 0.0)))), 1),
-        }
-    except (TypeError, ValueError, AttributeError):
-        axes = {"per": 0.0, "sci": 0.0, "cps": 0.0}
+    def _axis(key: str) -> float:
+        v = item.get(key)
+        if v is None:
+            v = axes_raw.get(key, 0.0)
+        try:
+            return round(max(0.0, min(5.0, float(v))), 1)
+        except (TypeError, ValueError):
+            return 0.0
+    axes = {"per": _axis("per"), "sci": _axis("sci"), "cps": _axis("cps")}
 
     return ProcessedArticle(
         title_ja=screen.get("title_ja", item.get("title_ja", original.get("title", ""))),
