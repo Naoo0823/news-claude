@@ -518,6 +518,37 @@
       white-space: nowrap;
       flex-shrink: 0;
     }
+
+    /* ===== Competitor Directory ===== */
+    .dir-section { margin-bottom: 32px; }
+    .dir-heading {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid var(--border);
+      font-family: -apple-system, sans-serif;
+    }
+    .dir-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+    .dir-card {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 99px;
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: -apple-system, sans-serif;
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .dir-card:hover { border-color: var(--accent); color: var(--accent); }
   </style>
 </head>
 <body>
@@ -525,7 +556,7 @@
     <div class="header-top">
       <div class="header-brand">
         <h1>Human Science Insights</h1>
-        <span class="header-updated">2026-04-27 01:43 JST</span>
+        <span class="header-updated">2026-04-27 01:59 JST</span>
       </div>
       <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
     </div>
@@ -556,8 +587,9 @@
   </div>
   <!-- 他社リサーチ サブナビ -->
   <div class="sub-nav-bar hidden" id="sub-nav-competitor">
-    <button class="sub-tab-btn active" data-sub="press" onclick="showSub('competitor','press')">競合プレスリリース</button>
-    <button class="sub-tab-btn"        data-sub="trend" onclick="showSub('competitor','trend')">業界・市場トレンド</button>
+    <button class="sub-tab-btn active" data-sub="press"      onclick="showSub('competitor','press')">競合プレスリリース</button>
+    <button class="sub-tab-btn"        data-sub="trend"      onclick="showSub('competitor','trend')">業界・市場トレンド</button>
+    <button class="sub-tab-btn"        data-sub="directory"  onclick="showSub('competitor','directory')">競合他社URL</button>
   </div>
 
   <main>
@@ -2523,6 +2555,77 @@
   <div class="empty">記事はありません</div>
 
       </div>
+      <div class="sub-panel hidden" id="sub-panel-competitor-directory">
+        <div class="dir-section">
+          <div class="dir-heading">組織人事コンサル</div>
+          <div class="dir-grid">
+            <a class="dir-card" href="https://www.mercer.com/ja-jp/" target="_blank" rel="noopener">マーサージャパン</a>
+            <a class="dir-card" href="https://www.kornferry.com/" target="_blank" rel="noopener">コーン・フェリー</a>
+            <a class="dir-card" href="https://www.wtwco.com/ja-JP" target="_blank" rel="noopener">ウイリス・タワーズワトソン</a>
+            <a class="dir-card" href="https://www.ddi.com/" target="_blank" rel="noopener">DDI</a>
+            <a class="dir-card" href="https://www.recruit-ms.co.jp/" target="_blank" rel="noopener">リクルートマネジメントソリューションズ</a>
+          </div>
+        </div>
+        <div class="dir-section">
+          <div class="dir-heading">総合・戦略コンサル</div>
+          <div class="dir-grid">
+            <a class="dir-card" href="https://www.mckinsey.com/jp" target="_blank" rel="noopener">マッキンゼー・アンド・カンパニー</a>
+            <a class="dir-card" href="https://www.bcg.com/ja-jp" target="_blank" rel="noopener">BCG</a>
+            <a class="dir-card" href="https://www.bain.com/ja/" target="_blank" rel="noopener">ベイン・アンド・カンパニー</a>
+            <a class="dir-card" href="https://www2.deloitte.com/jp/" target="_blank" rel="noopener">デロイト トーマツ コンサルティング</a>
+            <a class="dir-card" href="https://www.accenture.com/jp-ja" target="_blank" rel="noopener">アクセンチュア</a>
+            <a class="dir-card" href="https://www.pwc.com/jp/ja/" target="_blank" rel="noopener">PwCコンサルティング</a>
+            <a class="dir-card" href="https://kpmg.com/jp/ja/" target="_blank" rel="noopener">KPMGコンサルティング</a>
+            <a class="dir-card" href="https://www.ey.com/ja_jp/" target="_blank" rel="noopener">EYストラテジー</a>
+            <a class="dir-card" href="https://www.adlittle.com/ja" target="_blank" rel="noopener">アーサー・D・リトル</a>
+            <a class="dir-card" href="https://www.dreamincubator.co.jp/" target="_blank" rel="noopener">ドリームインキュベータ</a>
+            <a class="dir-card" href="https://www.igpi.co.jp/" target="_blank" rel="noopener">経営共創基盤（IGPI）</a>
+            <a class="dir-card" href="https://www.nri.com/jp" target="_blank" rel="noopener">野村総合研究所（NRI）</a>
+            <a class="dir-card" href="https://www.abeam.com/jp/ja" target="_blank" rel="noopener">アビームコンサルティング</a>
+            <a class="dir-card" href="https://www.nttdata-strategy.com/" target="_blank" rel="noopener">NTTデータ経営研究所</a>
+          </div>
+        </div>
+        <div class="dir-section">
+          <div class="dir-heading">HRテック</div>
+          <div class="dir-grid">
+            <a class="dir-card" href="https://smarthr.jp/" target="_blank" rel="noopener">SmartHR</a>
+            <a class="dir-card" href="https://kaonavi.jp/" target="_blank" rel="noopener">カオナビ</a>
+            <a class="dir-card" href="https://www.hrbrain.jp/" target="_blank" rel="noopener">HRBrain</a>
+            <a class="dir-card" href="https://www.workday.com/ja-jp/" target="_blank" rel="noopener">ワークデイ</a>
+            <a class="dir-card" href="https://www.works-hi.co.jp/corporate" target="_blank" rel="noopener">ワークスHI</a>
+          </div>
+        </div>
+        <div class="dir-section">
+          <div class="dir-heading">人材紹介・採用</div>
+          <div class="dir-grid">
+            <a class="dir-card" href="https://www.recruit.co.jp/" target="_blank" rel="noopener">リクルートホールディングス</a>
+            <a class="dir-card" href="https://www.persol-group.co.jp/" target="_blank" rel="noopener">パーソルホールディングス</a>
+            <a class="dir-card" href="https://corp.en-japan.com/" target="_blank" rel="noopener">エン・ジャパン</a>
+            <a class="dir-card" href="https://www.mynavi.jp/" target="_blank" rel="noopener">マイナビ</a>
+            <a class="dir-card" href="https://www.jac-recruitment.jp/" target="_blank" rel="noopener">JAC Recruitment</a>
+            <a class="dir-card" href="https://919.jp/" target="_blank" rel="noopener">クイック</a>
+            <a class="dir-card" href="https://www.pasonagroup.co.jp/" target="_blank" rel="noopener">パソナグループ</a>
+          </div>
+        </div>
+        <div class="dir-section">
+          <div class="dir-heading">研修・教育</div>
+          <div class="dir-grid">
+            <a class="dir-card" href="https://www.globis.co.jp/" target="_blank" rel="noopener">グロービス</a>
+            <a class="dir-card" href="https://www.jma.or.jp/" target="_blank" rel="noopener">日本能率協会</a>
+          </div>
+        </div>
+        <div class="dir-section">
+          <div class="dir-heading">メガベンチャー</div>
+          <div class="dir-grid">
+            <a class="dir-card" href="https://www.cyberagent.co.jp/" target="_blank" rel="noopener">サイバーエージェント</a>
+            <a class="dir-card" href="https://about.mercari.com/" target="_blank" rel="noopener">メルカリ</a>
+            <a class="dir-card" href="https://corp.freee.co.jp/" target="_blank" rel="noopener">freee</a>
+            <a class="dir-card" href="https://jp.sansan.com/" target="_blank" rel="noopener">Sansan</a>
+            <a class="dir-card" href="https://corp.moneyforward.com/" target="_blank" rel="noopener">マネーフォワード</a>
+            <a class="dir-card" href="https://dena.com/jp/" target="_blank" rel="noopener">DeNA</a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ===== お気に入り パネル ===== -->
@@ -2583,7 +2686,7 @@
         currentSubComp = tab;
         document.querySelectorAll('#sub-nav-competitor .sub-tab-btn').forEach(b =>
           b.classList.toggle('active', b.dataset.sub === tab));
-        ['press', 'trend'].forEach(k =>
+        ['press', 'trend', 'directory'].forEach(k =>
           document.getElementById(`sub-panel-competitor-${k}`).classList.toggle('hidden', k !== tab));
       }
       requestAnimationFrame(function() {

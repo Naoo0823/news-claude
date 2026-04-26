@@ -40,6 +40,60 @@ _CAT_MAP: dict[str, tuple[str, str | None, str | None]] = {
     "hr_academic":       ("competitor", "trend",      None),
 }
 
+COMPETITOR_DIRECTORY: list[tuple[str, list[tuple[str, str]]]] = [
+    ("組織人事コンサル", [
+        ("マーサージャパン",                   "https://www.mercer.com/ja-jp/"),
+        ("コーン・フェリー",                   "https://www.kornferry.com/"),
+        ("ウイリス・タワーズワトソン",           "https://www.wtwco.com/ja-JP"),
+        ("DDI",                               "https://www.ddi.com/"),
+        ("リクルートマネジメントソリューションズ", "https://www.recruit-ms.co.jp/"),
+    ]),
+    ("総合・戦略コンサル", [
+        ("マッキンゼー・アンド・カンパニー",   "https://www.mckinsey.com/jp"),
+        ("BCG",                              "https://www.bcg.com/ja-jp"),
+        ("ベイン・アンド・カンパニー",         "https://www.bain.com/ja/"),
+        ("デロイト トーマツ コンサルティング", "https://www2.deloitte.com/jp/"),
+        ("アクセンチュア",                    "https://www.accenture.com/jp-ja"),
+        ("PwCコンサルティング",               "https://www.pwc.com/jp/ja/"),
+        ("KPMGコンサルティング",              "https://kpmg.com/jp/ja/"),
+        ("EYストラテジー",                    "https://www.ey.com/ja_jp/"),
+        ("アーサー・D・リトル",               "https://www.adlittle.com/ja"),
+        ("ドリームインキュベータ",             "https://www.dreamincubator.co.jp/"),
+        ("経営共創基盤（IGPI）",              "https://www.igpi.co.jp/"),
+        ("野村総合研究所（NRI）",             "https://www.nri.com/jp"),
+        ("アビームコンサルティング",           "https://www.abeam.com/jp/ja"),
+        ("NTTデータ経営研究所",              "https://www.nttdata-strategy.com/"),
+    ]),
+    ("HRテック", [
+        ("SmartHR",    "https://smarthr.jp/"),
+        ("カオナビ",   "https://kaonavi.jp/"),
+        ("HRBrain",    "https://www.hrbrain.jp/"),
+        ("ワークデイ", "https://www.workday.com/ja-jp/"),
+        ("ワークスHI", "https://www.works-hi.co.jp/corporate"),
+    ]),
+    ("人材紹介・採用", [
+        ("リクルートホールディングス", "https://www.recruit.co.jp/"),
+        ("パーソルホールディングス",   "https://www.persol-group.co.jp/"),
+        ("エン・ジャパン",            "https://corp.en-japan.com/"),
+        ("マイナビ",                  "https://www.mynavi.jp/"),
+        ("JAC Recruitment",          "https://www.jac-recruitment.jp/"),
+        ("クイック",                  "https://919.jp/"),
+        ("パソナグループ",            "https://www.pasonagroup.co.jp/"),
+    ]),
+    ("研修・教育", [
+        ("グロービス",     "https://www.globis.co.jp/"),
+        ("日本能率協会",   "https://www.jma.or.jp/"),
+    ]),
+    ("メガベンチャー", [
+        ("サイバーエージェント", "https://www.cyberagent.co.jp/"),
+        ("メルカリ",            "https://about.mercari.com/"),
+        ("freee",               "https://corp.freee.co.jp/"),
+        ("Sansan",              "https://jp.sansan.com/"),
+        ("マネーフォワード",    "https://corp.moneyforward.com/"),
+        ("DeNA",                "https://dena.com/jp/"),
+    ]),
+]
+
 _HOT_CATS: frozenset[str] = frozenset({
     "ai_product", "ai_business", "ai_press", "ai_social",
     "competitor_press", "hr_press",
@@ -916,6 +970,37 @@ HTML_TEMPLATE = """\
       white-space: nowrap;
       flex-shrink: 0;
     }
+
+    /* ===== Competitor Directory ===== */
+    .dir-section { margin-bottom: 32px; }
+    .dir-heading {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid var(--border);
+      font-family: -apple-system, sans-serif;
+    }
+    .dir-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+    .dir-card {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 99px;
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: -apple-system, sans-serif;
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .dir-card:hover { border-color: var(--accent); color: var(--accent); }
   </style>
 </head>
 <body>
@@ -954,8 +1039,9 @@ HTML_TEMPLATE = """\
   </div>
   <!-- 他社リサーチ サブナビ -->
   <div class="sub-nav-bar hidden" id="sub-nav-competitor">
-    <button class="sub-tab-btn active" data-sub="press" onclick="showSub('competitor','press')">競合プレスリリース</button>
-    <button class="sub-tab-btn"        data-sub="trend" onclick="showSub('competitor','trend')">業界・市場トレンド</button>
+    <button class="sub-tab-btn active" data-sub="press"      onclick="showSub('competitor','press')">競合プレスリリース</button>
+    <button class="sub-tab-btn"        data-sub="trend"      onclick="showSub('competitor','trend')">業界・市場トレンド</button>
+    <button class="sub-tab-btn"        data-sub="directory"  onclick="showSub('competitor','directory')">競合他社URL</button>
   </div>
 
   <main>
@@ -1009,6 +1095,18 @@ HTML_TEMPLATE = """\
       </div>
       <div class="sub-panel hidden" id="sub-panel-competitor-trend">
         {{ render_timeline(panels.competitor.trend) }}
+      </div>
+      <div class="sub-panel hidden" id="sub-panel-competitor-directory">
+        {%- for cat_name, companies in competitor_directory %}
+        <div class="dir-section">
+          <div class="dir-heading">{{ cat_name }}</div>
+          <div class="dir-grid">
+            {%- for name, url in companies %}
+            <a class="dir-card" href="{{ url }}" target="_blank" rel="noopener">{{ name }}</a>
+            {%- endfor %}
+          </div>
+        </div>
+        {%- endfor %}
       </div>
     </div>
 
@@ -1070,7 +1168,7 @@ HTML_TEMPLATE = """\
         currentSubComp = tab;
         document.querySelectorAll('#sub-nav-competitor .sub-tab-btn').forEach(b =>
           b.classList.toggle('active', b.dataset.sub === tab));
-        ['press', 'trend'].forEach(k =>
+        ['press', 'trend', 'directory'].forEach(k =>
           document.getElementById(`sub-panel-competitor-${k}`).classList.toggle('hidden', k !== tab));
       }
       requestAnimationFrame(function() {
@@ -1466,7 +1564,7 @@ def generate_html(
 
     env = Environment(loader=BaseLoader())
     tmpl = env.from_string(HTML_TEMPLATE)
-    html = tmpl.render(updated=updated_str, panels=panels)
+    html = tmpl.render(updated=updated_str, panels=panels, competitor_directory=COMPETITOR_DIRECTORY)
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
