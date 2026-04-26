@@ -278,6 +278,52 @@ def _filter_and_group(articles: list[dict], cat_keys: list[str], limit: int = TI
     return _group_by_date(filtered)
 
 
+def _compute_related(articles: list[dict]) -> dict[str, list[dict]]:
+    """各記事に対して共通ハッシュタグベースの関連記事（最大3件）を計算する"""
+    url_to_art = {a["url"]: a for a in articles if a.get("url")}
+    tag_index: dict[str, list[str]] = {}
+    for a in articles:
+        for tag in (a.get("hashtags") or []):
+            tag_index.setdefault(tag, []).append(a.get("url", ""))
+
+    def _parent(a: dict) -> str | None:
+        m = _CAT_MAP.get(a.get("category", ""))
+        return m[0] if m else None
+
+    result: dict[str, list[dict]] = {}
+    for a in articles:
+        url = a.get("url")
+        if not url:
+            continue
+        tags = set(a.get("hashtags") or [])
+        scores: dict[str, int] = {}
+        for tag in tags:
+            for other_url in tag_index.get(tag, []):
+                if other_url and other_url != url:
+                    scores[other_url] = scores.get(other_url, 0) + 1
+        ranked = sorted(scores, key=lambda u: scores[u], reverse=True)
+        selected: list[str] = ranked[:3]
+        if len(selected) < 3:
+            p = _parent(a)
+            for other in articles:
+                if len(selected) >= 3:
+                    break
+                ou = other.get("url")
+                if ou and ou != url and ou not in selected and _parent(other) == p:
+                    selected.append(ou)
+        result[url] = [
+            {
+                "url":            u,
+                "title_ja":       url_to_art[u].get("title_ja", ""),
+                "published_jst":  url_to_art[u].get("published_jst", ""),
+                "category_label": url_to_art[u].get("category_label", ""),
+            }
+            for u in selected
+            if u in url_to_art
+        ]
+    return result
+
+
 # ── HTML テンプレート ─────────────────────────────────────────────────────────
 
 HTML_TEMPLATE = """\
@@ -314,6 +360,23 @@ HTML_TEMPLATE = """\
     <div class="exp-text">{{ article.insight }}</div>
     <button class="exp-btn" onclick="toggleExp(this)">続きを読む...</button>
   </div>
+  <div class="insight-actions">
+    <button class="share-x-btn" onclick="shareInsight(this)" title="X(Twitter)でシェア">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.735-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      シェア
+    </button>
+  </div>
+  {%- if article.related %}
+  <div class="card-related hidden">
+    <div class="related-label">Related Articles</div>
+    {%- for r in article.related %}
+    <a class="related-item" href="{{ r.url }}" target="_blank" rel="noopener">
+      <span class="related-title">{{ r.title_ja }}</span>
+      <span class="related-date">{{ r.published_jst[:10] }}</span>
+    </a>
+    {%- endfor %}
+  </div>
+  {%- endif %}
   <div class="card-footer">
     <span class="card-date">{{ article.published_jst }}</span>
     <a class="read-link" href="{{ article.url }}" target="_blank" rel="noopener">原文 →</a>
@@ -793,6 +856,81 @@ HTML_TEMPLATE = """\
     }
     .exp-btn:hover { text-decoration: underline; }
     .card-insight .exp-btn { color: var(--accent2); }
+
+    /* ===== Insight Share Button ===== */
+    .insight-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 6px;
+    }
+    .share-x-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      min-height: 36px;
+      cursor: pointer;
+      color: var(--text2);
+      font-size: 11px;
+      font-family: -apple-system, sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .share-x-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--tag-bg); }
+    @media (max-width: 640px) { .share-x-btn { min-height: 44px; } }
+
+    /* ===== Related Articles ===== */
+    .card-related {
+      margin-top: 10px;
+      padding: 10px 13px;
+      background: var(--border-subtle);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .related-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-family: -apple-system, sans-serif;
+    }
+    .related-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      transition: color 0.15s;
+    }
+    .related-item:last-child { border-bottom: none; }
+    .related-item:hover { color: var(--accent); }
+    .related-title {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.4;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .related-date {
+      font-size: 10.5px;
+      color: var(--muted);
+      font-family: -apple-system, sans-serif;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
@@ -1025,11 +1163,15 @@ HTML_TEMPLATE = """\
     function toggleExp(btn) {
       var el = btn.previousElementSibling;
       if (!el || !el.classList.contains('exp-text')) return;
+      var isInsight = !!btn.closest('.card-insight');
+      var card = btn.closest('.card');
+      var relatedEl = card ? card.querySelector('.card-related') : null;
       if (el.classList.contains('open')) {
         el.style.maxHeight = el.scrollHeight + 'px';
         el.classList.remove('open');
         requestAnimationFrame(function () { el.style.maxHeight = '4.8em'; });
         btn.textContent = '続きを読む...';
+        if (isInsight && relatedEl) relatedEl.classList.add('hidden');
       } else {
         el.classList.add('open');
         el.style.maxHeight = el.scrollHeight + 'px';
@@ -1038,7 +1180,22 @@ HTML_TEMPLATE = """\
           if (el.classList.contains('open')) el.style.maxHeight = 'none';
           el.removeEventListener('transitionend', handler);
         });
+        if (isInsight && relatedEl) relatedEl.classList.remove('hidden');
       }
+    }
+
+    /* ── SNS Share ── */
+    function shareInsight(btn) {
+      var card = btn.closest('.card');
+      if (!card) return;
+      var titleEl = card.querySelector('.card-title a');
+      var insightEl = card.querySelector('.card-insight .exp-text');
+      var title   = titleEl   ? titleEl.textContent.trim()   : '';
+      var insight = insightEl ? insightEl.textContent.trim() : '';
+      var url     = card.dataset.url || '';
+      var preview = insight.length > 80 ? insight.slice(0, 80) + '…' : insight;
+      var text = '【考察あり】' + title + '\n' + preview + '\n#HumanScienceInsights\n' + url;
+      window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank', 'noopener,noreferrer');
     }
 
     /* ── checkExpBtn / initExpBtns ──────────────────────────────────────────
@@ -1186,6 +1343,12 @@ HTML_TEMPLATE = """\
     <div class="exp-text">${a.insight}</div>
     <button class="exp-btn" onclick="toggleExp(this)">続きを読む...</button>
   </div>
+  <div class="insight-actions">
+    <button class="share-x-btn" onclick="shareInsight(this)" title="X(Twitter)でシェア">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.735-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      シェア
+    </button>
+  </div>
   <div class="card-footer">
     <span class="card-date">${a.published_jst}</span>
     <a class="read-link" href="${a.url}" target="_blank" rel="noopener">原文 →</a>
@@ -1265,6 +1428,11 @@ def generate_html(
     # エンリッチ → 日時降順ソート
     all_articles = _enrich_articles(raw)
     all_articles.sort(key=lambda a: a.get("published", ""), reverse=True)
+
+    # 関連記事を計算し各記事に付与
+    related_map = _compute_related(all_articles)
+    for a in all_articles:
+        a["related"] = related_map.get(a.get("url", ""), [])
 
     # Hot Topics 更新
     if cache_dir:
