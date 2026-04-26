@@ -914,6 +914,7 @@ HTML_TEMPLATE = """\
 
     /* ── Parent tab switching ── */
     function showParent(tab) {
+      console.log('[showParent] tab=' + tab + ' (prev=' + currentParent + ')');
       currentParent = tab;
       document.querySelectorAll('.nav-bar .tab-btn').forEach(b =>
         b.classList.toggle('active', b.dataset.parent === tab));
@@ -928,11 +929,16 @@ HTML_TEMPLATE = """\
       document.getElementById('panel-competitor').classList.toggle('hidden', tab !== 'competitor');
       document.getElementById('panel-favorites').classList.toggle('hidden',  tab !== 'favorites');
       if (tab === 'favorites') renderFavorites();
-      requestAnimationFrame(function() { initExpBtns(document.getElementById('panel-' + tab)); });
+      requestAnimationFrame(function() {
+        var panelEl = document.getElementById('panel-' + tab);
+        console.log('[showParent] rAF: initExpBtns for #panel-' + tab + ', found=' + !!panelEl);
+        initExpBtns(panelEl);
+      });
     }
 
     /* ── Sub tab switching ── */
     function showSub(parent, tab) {
+      console.log('[showSub] parent=' + parent + ' tab=' + tab);
       if (parent === 'ai') {
         currentSubAi = tab;
         document.querySelectorAll('#sub-nav-ai .sub-tab-btn').forEach(b =>
@@ -953,17 +959,28 @@ HTML_TEMPLATE = """\
         ['press', 'trend'].forEach(k =>
           document.getElementById(`sub-panel-competitor-${k}`).classList.toggle('hidden', k !== tab));
       }
-      requestAnimationFrame(function() { initExpBtns(document.getElementById(`sub-panel-${parent}-${tab}`)); });
+      requestAnimationFrame(function() {
+        var pid = 'sub-panel-' + parent + '-' + tab;
+        var subEl = document.getElementById(pid);
+        console.log('[showSub] rAF: initExpBtns for #' + pid + ', found=' + !!subEl);
+        initExpBtns(subEl);
+      });
     }
 
     /* ── Sub3 tab switching (脳科学 > 研究) ── */
     function showSub3(tab) {
+      console.log('[showSub3] tab=' + tab);
       currentSub3 = tab;
       document.querySelectorAll('#sub3-nav-research .sub-tab-btn').forEach(b =>
         b.classList.toggle('active', b.dataset.sub3 === tab));
       ['embodiment', 'psychology'].forEach(k =>
         document.getElementById(`sub3-panel-${k}`).classList.toggle('hidden', k !== tab));
-      requestAnimationFrame(function() { initExpBtns(document.getElementById(`sub3-panel-${tab}`)); });
+      requestAnimationFrame(function() {
+        var pid = 'sub3-panel-' + tab;
+        var sub3El = document.getElementById(pid);
+        console.log('[showSub3] rAF: initExpBtns for #' + pid + ', found=' + !!sub3El);
+        initExpBtns(sub3El);
+      });
     }
 
     /* ── Competitor group chip filter ── */
@@ -1014,9 +1031,8 @@ HTML_TEMPLATE = """\
         requestAnimationFrame(function () { el.style.maxHeight = '4.8em'; });
         btn.textContent = '続きを読む...';
       } else {
-        var targetH = el.scrollHeight + 'px';
         el.classList.add('open');
-        el.style.maxHeight = targetH;
+        el.style.maxHeight = el.scrollHeight + 'px';
         btn.textContent = '閉じる';
         el.addEventListener('transitionend', function handler() {
           if (el.classList.contains('open')) el.style.maxHeight = 'none';
@@ -1024,20 +1040,61 @@ HTML_TEMPLATE = """\
         });
       }
     }
-    /* initExpBtns: hiddenパネルでは scrollHeight=0 になるため、
-       パネルが可視になったタイミングで遅延初期化する。
-       data-exp-init 属性で二重初期化を防ぐ。 */
-    function initExpBtns(root) {
-      var target = root || document;
-      target.querySelectorAll('.exp-btn').forEach(function(btn) {
-        if (btn.dataset.expInit) return;
-        btn.dataset.expInit = '1';
-        var el = btn.previousElementSibling;
-        if (el && el.classList.contains('exp-text') && el.scrollHeight <= el.clientHeight + 4)
-          btn.style.display = 'none';
-      });
+
+    /* ── checkExpBtn / initExpBtns ──────────────────────────────────────────
+       【設計方針】
+       - data-exp-init ガードを廃止: hidden パネルでは scrollHeight=0 になるため
+         window.load 時に「短いテキスト」と誤判定→永続的に非表示になるバグを根絶。
+       - scrollHeight===0 チェックで不可視要素をスキップ（判定を延期するだけ）。
+       - ResizeObserver で「パネルが可視化された瞬間」を自動検知して再判定する。
+         これにより showParent/showSub 呼び出し後に RAF を使わなくても確実に動く。
+       - RAF + initExpBtns 呼び出しは念のため残し二重の安全策とする。
+    ─────────────────────────────────────────────────────────────────────── */
+
+    /* 1ボタン分の表示/非表示を判定 */
+    function checkExpBtn(btn) {
+      var el = btn.previousElementSibling;
+      if (!el || !el.classList.contains('exp-text')) return;
+      if (el.scrollHeight === 0) {
+        /* 不可視要素 (display:none の祖先あり) → 判定スキップ。
+           ResizeObserver が可視化を検知して再コールされる。 */
+        console.log('[checkExpBtn] skip: scrollHeight=0 (element not visible yet)');
+        return;
+      }
+      var shouldHide = el.scrollHeight <= el.clientHeight + 4;
+      console.log('[checkExpBtn] scrollH=' + el.scrollHeight
+        + ' clientH=' + el.clientHeight + ' → ' + (shouldHide ? 'HIDE' : 'SHOW'));
+      btn.style.display = shouldHide ? 'none' : '';
     }
-    window.addEventListener('load', function() { initExpBtns(); });
+
+    /* root 内の全 .exp-btn を評価し ResizeObserver をアタッチ */
+    function initExpBtns(root) {
+      console.log('[initExpBtns] start root=' + (root ? '#' + (root.id || root.className) : 'document'));
+      var target = root || document;
+      var total = 0, skipped = 0;
+      target.querySelectorAll('.exp-btn').forEach(function(btn) {
+        total++;
+        checkExpBtn(btn);
+        /* ResizeObserver: 0→実寸へのリサイズ（パネル可視化）を自動検知 */
+        var el = btn.previousElementSibling;
+        if (!el || !el.classList.contains('exp-text') || !window.ResizeObserver) return;
+        if (el.dataset.roAttached) { skipped++; return; }
+        el.dataset.roAttached = '1';
+        (new ResizeObserver(function() {
+          console.log('[ResizeObserver] fired, re-checking btn');
+          checkExpBtn(btn);
+        })).observe(el);
+      });
+      console.log('[initExpBtns] done: total=' + total + ' ro-skipped=' + skipped);
+    }
+
+    /* window.load: 全要素に ResizeObserver をアタッチ。
+       hidden パネル内ボタンは checkExpBtn でスキップされ、
+       タブ表示時に ResizeObserver が自動的に再判定を走らせる。 */
+    window.addEventListener('load', function() {
+      console.log('[load] initExpBtns on full document');
+      initExpBtns();
+    });
 
     /* ── Scroll-hide header ── */
     (function () {
