@@ -327,11 +327,24 @@ def _compute_related(articles: list[dict]) -> dict[str, list[dict]]:
 # ── HTML テンプレート ─────────────────────────────────────────────────────────
 
 HTML_TEMPLATE = """\
+{%- macro render_mini_stars(score) -%}
+{%- for i in range(1, 6) -%}<span class="mini-star {{ 'filled' if i <= score|float else 'empty' }}">★</span>{%- endfor -%}<span class="mini-val">{{ "%.1f"|format(score|float) }}</span>
+{%- endmacro -%}
+
 {%- macro render_stars(impact, axes=none) -%}
+<div class="impact-block">
 <span class="impact-stars" title="Impact {{ "%.1f"|format(impact|float) }}/5{% if axes and axes.per is defined %} | PER:{{ "%.1f"|format(axes.per|float) }} SCI:{{ "%.1f"|format(axes.sci|float) }} CPS:{{ "%.1f"|format(axes.cps|float) }}{% endif %}">
   {%- for i in range(1, 6) -%}<span class="star {{ 'filled' if i <= impact|float else 'empty' }}">★</span>{%- endfor -%}
-  <span class="impact-val">{{ "%.1f"|format(impact|float) }}</span>
+  <span class="impact-val">{{ "%.1f"|format(impact|float) }}</span><span class="impact-label">Total</span>
 </span>
+{%- if axes and axes.per is defined %}
+<div class="impact-axes">
+  <span class="axis-item" title="PER &amp; Social Impact"><span class="axis-label">PER</span>{{ render_mini_stars(axes.per) }}</span>
+  <span class="axis-item" title="Utility &amp; Curiosity"><span class="axis-label">SCI</span>{{ render_mini_stars(axes.sci) }}</span>
+  <span class="axis-item" title="Transformative Potential"><span class="axis-label">CPS</span>{{ render_mini_stars(axes.cps) }}</span>
+</div>
+{%- endif %}
+</div>
 {%- endmacro -%}
 
 {%- macro render_card(article, extra_class='') -%}
@@ -696,7 +709,7 @@ HTML_TEMPLATE = """\
     }
 
     /* ===== Card Internals ===== */
-    .card-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    .card-meta { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
     .card-tag {
       display: inline-block;
       font-size: 9.5px;
@@ -833,6 +846,15 @@ HTML_TEMPLATE = """\
     }
     [data-theme="dark"] .hashtag { color: var(--accent2); background: var(--tag-bg); }
     .impact-val { font-size: 10px; color: var(--muted); font-family: -apple-system, sans-serif; margin-left: 2px; }
+    .impact-label { font-size: 8px; color: var(--muted); font-family: -apple-system, sans-serif; letter-spacing: 0.04em; margin-left: 4px; text-transform: uppercase; }
+    .impact-block { display: inline-flex; flex-direction: column; gap: 3px; }
+    .impact-axes { display: flex; gap: 8px; flex-wrap: wrap; }
+    .axis-item { display: inline-flex; align-items: center; gap: 2px; }
+    .axis-label { font-size: 8px; font-weight: 700; letter-spacing: 0.08em; color: var(--muted); font-family: -apple-system, sans-serif; text-transform: uppercase; min-width: 22px; }
+    .mini-star { font-size: 9px; line-height: 1; }
+    .mini-star.filled { color: var(--star-filled); }
+    .mini-star.empty  { color: var(--star-empty); }
+    .mini-val { font-size: 8.5px; color: var(--muted); font-family: -apple-system, sans-serif; margin-left: 1px; }
     .empty { grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 60px 0; font-size: 14px; font-family: -apple-system, sans-serif; }
 
     /* ===== Accordion ===== */
@@ -1330,12 +1352,25 @@ HTML_TEMPLATE = """\
         btn.title = isFav ? 'お気に入りから削除' : 'お気に入りに追加';
       });
     }
+    function renderMiniStars(score) {
+      const s = parseFloat(score) || 0;
+      const stars = Array.from({length:5}, (_,i) =>
+        `<span class="mini-star ${i < s ? 'filled' : 'empty'}">★</span>`).join('');
+      return stars + `<span class="mini-val">${s.toFixed(1)}</span>`;
+    }
     function renderFavCard(a) {
       const imp = parseFloat(a.impact) || 0;
       const stars = Array.from({length:5}, (_,i) =>
         `<span class="star ${i < imp ? 'filled' : 'empty'}">★</span>`).join('');
-      const axTitle = a.impact_axes && a.impact_axes.per != null
-        ? ` | PER:${a.impact_axes.per} SCI:${a.impact_axes.sci} CPS:${a.impact_axes.cps}` : '';
+      const ax = a.impact_axes || {};
+      const axTitle = ax.per != null
+        ? ` | PER:${ax.per} SCI:${ax.sci} CPS:${ax.cps}` : '';
+      const axesHtml = ax.per != null ? `
+    <div class="impact-axes">
+      <span class="axis-item" title="PER &amp; Social Impact"><span class="axis-label">PER</span>${renderMiniStars(ax.per)}</span>
+      <span class="axis-item" title="Utility &amp; Curiosity"><span class="axis-label">SCI</span>${renderMiniStars(ax.sci)}</span>
+      <span class="axis-item" title="Transformative Potential"><span class="axis-label">CPS</span>${renderMiniStars(ax.cps)}</span>
+    </div>` : '';
       const hashtags = (a.hashtags||[]).map(t=>`<span class="hashtag">${t}</span>`).join('');
       const src = a.source ? `<span class="card-source">${a.source}</span>` : '';
       return `<article class="card" data-url="${a.url}" data-competitor-group="${a.competitor_group||''}">
@@ -1343,7 +1378,9 @@ HTML_TEMPLATE = """\
   <button class="fav-btn favorited" data-url="${a.url}" onclick="toggleFav('${a.url.replace(/'/g,"\\'")}')">★</button>
   <div class="card-meta">
     <span class="card-tag">${a.category_label||''}</span>${src}
-    <span class="impact-stars" title="Impact ${imp.toFixed(1)}/5${axTitle}">${stars}<span class="impact-val">${imp.toFixed(1)}</span></span>
+    <div class="impact-block">
+    <span class="impact-stars" title="Impact ${imp.toFixed(1)}/5${axTitle}">${stars}<span class="impact-val">${imp.toFixed(1)}</span><span class="impact-label">Total</span></span>${axesHtml}
+    </div>
   </div>
   <div class="card-title"><a href="${a.url}" target="_blank" rel="noopener">${a.title_ja}</a></div>
   ${hashtags ? `<div class="card-hashtags">${hashtags}</div>` : ''}
