@@ -40,6 +40,97 @@ _CAT_MAP: dict[str, tuple[str, str | None, str | None]] = {
     "hr_academic":       ("competitor", "trend",      None),
 }
 
+MARKET_TRENDS: list[dict] = [
+    {
+        "category": "コンサル × AI",
+        "headline": "生成AIによるコンサル業務の大規模再編が進行中",
+        "body": (
+            "BCG・マッキンゼーなど大手コンサルは生成AI活用でプロジェクト工数の20〜40%削減を報告。"
+            "分析・資料作成の自動化が加速し、コンサルタントの付加価値は「戦略立案・意思決定支援・関係構築」へ急速にシフト。"
+            "ジュニアコンサルの採用絞り込みと、シニア層へのAIツール習熟投資が業界共通の動きとなっている。"
+        ),
+        "source": "McKinsey Global Institute",
+        "url": "https://www.mckinsey.com/mgi/",
+    },
+    {
+        "category": "採用市場",
+        "headline": "新卒採用の「超早期化」が止まらない",
+        "body": (
+            "政府指針（大学3年3月解禁）に反し、実態は大学3年の夏インターン（6〜8月）が実質選考化。"
+            "2026年卒では採用活動の実質開始が3年6月以前となる企業が4割超を占める（リクルートワークス研究所調べ）。"
+            "内定時期の前倒しは学業・留学機会の喪失を招き、社会問題として国会審議にも上がっている。"
+        ),
+        "source": "リクルートワークス研究所",
+        "url": "https://www.works-i.com/",
+    },
+    {
+        "category": "人事制度",
+        "headline": "ジョブ型人事制度の導入が大企業から中堅企業へ波及",
+        "body": (
+            "従業員1,000人以上の大企業の約60%がジョブ型人事制度の導入を検討・実施（2024年、パーソル総合研究所）。"
+            "日立・富士通・資生堂など先行大手の事例が呼び水となり、「職能資格制度の限界」を感じる中堅企業にも波及中。"
+            "一方で「ジョブ定義の難しさ」「評価基準の整備コスト」が導入障壁として挙げられる。"
+        ),
+        "source": "パーソル総合研究所",
+        "url": "https://rc.persol-group.co.jp/",
+    },
+    {
+        "category": "エンゲージメント",
+        "headline": "従業員エンゲージメントと企業業績の相関が経営指標に",
+        "body": (
+            "Gallupの調査では、エンゲージメント上位4分位の企業は下位4分位と比較しEPS成長率で147%上回る。"
+            "日本のエンゲージメントスコアは先進国最低水準（世界平均23%に対し日本は約6%）であり、"
+            "「エンゲージメントサーベイの経営KPI化」がHR投資判断の中心的テーマとなっている。"
+        ),
+        "source": "Gallup State of the Global Workplace",
+        "url": "https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx",
+    },
+    {
+        "category": "労働市場",
+        "headline": "2030年に最大644万人の労働力不足が到来",
+        "body": (
+            "パーソル総合研究所・中央大学の試算では、2030年に国内で最大644万人の人手不足が発生する見込み。"
+            "IT（約79万人）・医療介護・物流が特に深刻。少子高齢化と団塊ジュニア世代の退職が重なる構造問題であり、"
+            "「外国人材・シニア活用・AI代替」の三本柱が政策・企業戦略の共通テーマとなっている。"
+        ),
+        "source": "パーソル総合研究所",
+        "url": "https://rc.persol-group.co.jp/",
+    },
+    {
+        "category": "マネジメント",
+        "headline": "プレイングマネージャー化で管理職機能が空洞化",
+        "body": (
+            "リクルートマネジメントソリューションズの調査では、管理職の約70%が「マネジメントに十分な時間を確保できていない」と回答。"
+            "人員削減・業務増加の中でプレイヤー業務を兼務する管理職が常態化し、"
+            "メンバーの育成・1on1・心理的安全性の確保が後回しになることで組織の自律性が低下している。"
+        ),
+        "source": "リクルートマネジメントソリューションズ",
+        "url": "https://www.recruit-ms.co.jp/",
+    },
+    {
+        "category": "人材開発",
+        "headline": "リスキリングが国家政策化・企業の義務へ",
+        "body": (
+            "政府は2022年に「5年間で1兆円のリスキリング支援」を表明。DX・AI領域を中心に、"
+            "企業主導の集合研修から「個人が主体的に学ぶリスキリング」へのパラダイムシフトが加速。"
+            "経済産業省は学び直し支援の制度整備を進め、企業側も補助金活用と学習機会提供が競争力の差別化要因となってきている。"
+        ),
+        "source": "経済産業省 リスキリングを通じたキャリアアップ支援",
+        "url": "https://www.meti.go.jp/policy/human_resource/reskilling/",
+    },
+    {
+        "category": "HRテック",
+        "headline": "国内HRテック市場が急拡大、エンゲージメント・タレント管理が牽引",
+        "body": (
+            "国内HRテック市場は2025年度に2,000億円規模に達する見込み（矢野経済研究所）。"
+            "エンゲージメントサーベイ・タレントマネジメント・採用DXが三大注目領域。"
+            "一方でツール乱立による「導入疲れ」も顕在化しており、統合型プラットフォームへの移行が次のトレンドとして浮上している。"
+        ),
+        "source": "矢野経済研究所",
+        "url": "https://www.yano.co.jp/",
+    },
+]
+
 COMPETITOR_DIRECTORY: list[tuple[str, list[tuple[str, str]]]] = [
     ("組織人事コンサル", [
         ("マーサージャパン",                   "https://www.mercer.com/ja-jp/"),
@@ -971,6 +1062,64 @@ HTML_TEMPLATE = """\
       flex-shrink: 0;
     }
 
+    /* ===== Market Trends ===== */
+    .trend-grid { display: flex; flex-direction: column; gap: 16px; }
+    .trend-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .trend-cat {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      background: var(--tag-bg);
+      padding: 2px 9px;
+      border-radius: 10px;
+      font-family: -apple-system, sans-serif;
+      width: fit-content;
+    }
+    .trend-headline {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .trend-body {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.75;
+      margin: 0;
+      font-family: -apple-system, sans-serif;
+    }
+    .trend-source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--muted);
+      text-decoration: none;
+      font-family: -apple-system, sans-serif;
+      margin-top: 4px;
+      transition: color 0.15s;
+    }
+    .trend-source-link:hover { color: var(--accent); }
+    .trend-note {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: -apple-system, sans-serif;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      border-left: 3px solid var(--border);
+    }
+
     /* ===== Competitor Directory ===== */
     .dir-section { margin-bottom: 32px; }
     .dir-heading {
@@ -1094,7 +1243,17 @@ HTML_TEMPLATE = """\
         {{ render_timeline(panels.competitor.press) }}
       </div>
       <div class="sub-panel hidden" id="sub-panel-competitor-trend">
-        {{ render_timeline(panels.competitor.trend) }}
+        <p class="trend-note">このタブは定期的に人手でキュレーションされる、業界の構造的トレンドをまとめたページです。毎朝のニュースではなく、現時点で多数の企業が注目している・困っているテーマを掲載しています。</p>
+        <div class="trend-grid">
+          {%- for t in market_trends %}
+          <div class="trend-card">
+            <span class="trend-cat">{{ t.category }}</span>
+            <div class="trend-headline">{{ t.headline }}</div>
+            <p class="trend-body">{{ t.body }}</p>
+            <a class="trend-source-link" href="{{ t.url }}" target="_blank" rel="noopener">出典：{{ t.source }} →</a>
+          </div>
+          {%- endfor %}
+        </div>
       </div>
       <div class="sub-panel hidden" id="sub-panel-competitor-directory">
         {%- for cat_name, companies in competitor_directory %}
@@ -1564,7 +1723,12 @@ def generate_html(
 
     env = Environment(loader=BaseLoader())
     tmpl = env.from_string(HTML_TEMPLATE)
-    html = tmpl.render(updated=updated_str, panels=panels, competitor_directory=COMPETITOR_DIRECTORY)
+    html = tmpl.render(
+        updated=updated_str,
+        panels=panels,
+        competitor_directory=COMPETITOR_DIRECTORY,
+        market_trends=MARKET_TRENDS,
+    )
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
