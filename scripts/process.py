@@ -152,15 +152,18 @@ LMへのこじつけを避け、業界全体の地殻変動や市場構造の変
 
 4.【impact】: (per + sci + cps) / 3 の単純平均（小数点第1位まで）。
 
-5.【hashtags】: 記事の本質を突く日本語ハッシュタグを3つ生成せよ。
-・このタグは関連記事レコメンドエンジンが参照する「紐付けキー」として機能する。
-・タグ同士は意味が重複しないよう、「技術領域」「応用分野」「社会的文脈」など異なる切り口で選べ。
-・例: #生成AI（技術領域）× #採用DX（応用分野）× #人的資本経営（社会的文脈）
+5.【hashtags】: 関連記事レコメンドエンジンの紐付けキーとして機能する日本語ハッシュタグを3つ生成せよ。
+・必ず以下の3レイヤーそれぞれから、具体的な言葉を1つずつ選ぶこと（抽象的・汎用的なタグは禁止）。
+  - レイヤー1「具体的な技術領域」: 例 → #LLMファインチューニング / #fMRI解析 / #エンゲージメントサーベイ
+  - レイヤー2「具体的な活用シーン」: 例 → #プロンプトエンジニアリング / #採用面接AI / #組織診断ツール
+  - レイヤー3「社会的背景・文脈」: 例 → #AI規制対応 / #人的資本開示 / #心理的安全性
+・タグ同士は意味が重複しないこと。
 
-━━ 鉄則 ━━
-・出力に引用番号（cite等）は一切含めないこと。
-・per / sci / cps は必ずトップレベルキーとして出力すること（impact_axes へのネストは不可）。
-・出力は以下のJSON配列形式のみを厳守し、説明文やコードブロック（```等）は一切不要。
+━━ 鉄則（絶対遵守） ━━
+・per, sci, cps は必ずトップレベルのキーとして出力し、辞書構造にネストさせないこと。
+・impact_axes というキーは出力に含めないこと。
+・引用番号（cite等）は一切含めないこと。
+・説明文・コードブロック（```等）は不要。以下のJSON配列形式のみを出力すること。
 
 [
   {
@@ -171,7 +174,7 @@ LMへのこじつけを避け、業界全体の地殻変動や市場構造の変
     "per": 0.0,
     "sci": 0.0,
     "cps": 0.0,
-    "hashtags": ["#タグ1", "#タグ2", "#タグ3"]
+    "hashtags": ["#LLMファインチューニング", "#採用面接AI", "#AI規制対応"]
   }
 ]
 """
@@ -236,7 +239,10 @@ class ProcessedArticle(TypedDict):
     hot: bool
     source: str          # 取得元ドメイン表示名（例: "TechCrunch"）
     impact: float        # 0.0〜5.0（0.1刻み）—— 3軸の単純平均
-    impact_axes: dict    # {"per": float, "sci": float, "cps": float}
+    per: float           # PER & Social Impact
+    sci: float           # Utility & Curiosity
+    cps: float           # Transformative Potential
+    impact_axes: dict    # {"per": float, "sci": float, "cps": float}（後方互換用）
     hashtags: list       # 日本語ハッシュタグ 3件
     competitor_group: str  # 競合グループ識別子（feeds.yml の group 値）
 
@@ -781,23 +787,18 @@ def _parse_article(original: Article, item: dict, screen: dict,
     parts = host.split(".")
     src = parts[-2].capitalize() if len(parts) >= 2 else host
 
-    try:
-        impact = float(item.get("impact", 0.0))
-        impact = max(0.0, min(5.0, round(impact * 10) / 10))
-    except (TypeError, ValueError):
-        impact = 3.0
-
-    # トップレベルキー（新形式）を優先し、なければ impact_axes ネスト（旧形式）にフォールバック
-    axes_raw = item.get("impact_axes") or {}
-    def _axis(key: str) -> float:
-        v = item.get(key)
-        if v is None:
-            v = axes_raw.get(key, 0.0)
+    def _clamp(v, default: float = 0.0) -> float:
         try:
             return round(max(0.0, min(5.0, float(v))), 1)
         except (TypeError, ValueError):
-            return 0.0
-    axes = {"per": _axis("per"), "sci": _axis("sci"), "cps": _axis("cps")}
+            return default
+
+    # トップレベルキー（新形式）を優先し、旧 impact_axes ネストにもフォールバック
+    axes_raw = item.get("impact_axes") or {}
+    per = _clamp(item.get("per") if item.get("per") is not None else axes_raw.get("per", 0.0))
+    sci = _clamp(item.get("sci") if item.get("sci") is not None else axes_raw.get("sci", 0.0))
+    cps = _clamp(item.get("cps") if item.get("cps") is not None else axes_raw.get("cps", 0.0))
+    impact_val = round((per + sci + cps) / 3, 1)
 
     return ProcessedArticle(
         title_ja=screen.get("title_ja", item.get("title_ja", original.get("title", ""))),
@@ -808,8 +809,11 @@ def _parse_article(original: Article, item: dict, screen: dict,
         category=cat,
         hot=bool(screen.get("hot", False)),
         source=src,
-        impact=impact,
-        impact_axes=axes,
+        impact=impact_val,
+        per=per,
+        sci=sci,
+        cps=cps,
+        impact_axes={"per": per, "sci": sci, "cps": cps},
         hashtags=[str(t) for t in (item.get("hashtags") or [])[:3]],
         competitor_group=original.get("group", ""),
     )
