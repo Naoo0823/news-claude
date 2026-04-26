@@ -49,8 +49,8 @@ MARKET_TRENDS: list[dict] = [
             "分析・資料作成の自動化が加速し、コンサルタントの付加価値は「戦略立案・意思決定支援・関係構築」へ急速にシフト。"
             "ジュニアコンサルの採用絞り込みと、シニア層へのAIツール習熟投資が業界共通の動きとなっている。"
         ),
-        "source": "McKinsey Global Institute",
-        "url": "https://www.mckinsey.com/mgi/",
+        "source": "McKinsey Global Institute: The Economic Potential of Generative AI",
+        "url": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier",
     },
     {
         "category": "採用市場",
@@ -60,19 +60,19 @@ MARKET_TRENDS: list[dict] = [
             "2026年卒では採用活動の実質開始が3年6月以前となる企業が4割超を占める（リクルートワークス研究所調べ）。"
             "内定時期の前倒しは学業・留学機会の喪失を招き、社会問題として国会審議にも上がっている。"
         ),
-        "source": "リクルートワークス研究所",
-        "url": "https://www.works-i.com/",
+        "source": "リクルートワークス研究所 採用見通し調査（2026年卒）",
+        "url": "https://www.works-i.com/surveys/report/241220_recruitment_outlook.html",
     },
     {
         "category": "人事制度",
         "headline": "ジョブ型人事制度の導入が大企業から中堅企業へ波及",
         "body": (
-            "従業員1,000人以上の大企業の約60%がジョブ型人事制度の導入を検討・実施（2024年、パーソル総合研究所）。"
+            "パーソル総合研究所の調査では、ジョブ型人事制度を「導入済み」の企業は18%、「導入検討中」は39.6%。"
             "日立・富士通・資生堂など先行大手の事例が呼び水となり、「職能資格制度の限界」を感じる中堅企業にも波及中。"
-            "一方で「ジョブ定義の難しさ」「評価基準の整備コスト」が導入障壁として挙げられる。"
+            "一方で「ジョブ定義の難しさ」「評価基準の整備コスト」が導入障壁として挙げられている。"
         ),
-        "source": "パーソル総合研究所",
-        "url": "https://rc.persol-group.co.jp/",
+        "source": "パーソル総合研究所 ジョブ型人事制度に関する企業実態調査",
+        "url": "https://rc.persol-group.co.jp/thinktank/data/employment.html",
     },
     {
         "category": "エンゲージメント",
@@ -82,7 +82,7 @@ MARKET_TRENDS: list[dict] = [
             "日本のエンゲージメントスコアは先進国最低水準（世界平均23%に対し日本は約6%）であり、"
             "「エンゲージメントサーベイの経営KPI化」がHR投資判断の中心的テーマとなっている。"
         ),
-        "source": "Gallup State of the Global Workplace",
+        "source": "Gallup State of the Global Workplace 2024",
         "url": "https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx",
     },
     {
@@ -93,19 +93,19 @@ MARKET_TRENDS: list[dict] = [
             "IT（約79万人）・医療介護・物流が特に深刻。少子高齢化と団塊ジュニア世代の退職が重なる構造問題であり、"
             "「外国人材・シニア活用・AI代替」の三本柱が政策・企業戦略の共通テーマとなっている。"
         ),
-        "source": "パーソル総合研究所",
-        "url": "https://rc.persol-group.co.jp/",
+        "source": "パーソル総合研究所 労働市場の未来推計2030",
+        "url": "https://rc.persol-group.co.jp/thinktank/spe/roudou2030/",
     },
     {
         "category": "マネジメント",
         "headline": "プレイングマネージャー化で管理職機能が空洞化",
         "body": (
-            "リクルートマネジメントソリューションズの調査では、管理職の約70%が「マネジメントに十分な時間を確保できていない」と回答。"
-            "人員削減・業務増加の中でプレイヤー業務を兼務する管理職が常態化し、"
-            "メンバーの育成・1on1・心理的安全性の確保が後回しになることで組織の自律性が低下している。"
+            "リクルートワークス研究所の調査では管理職の87.3%がプレイヤー業務を兼務する「プレイングマネジャー」状態。"
+            "リクルートMSの意識調査（2024年）では管理職の多くが「メンバーのやる気を高めること」を最も難しい業務と回答。"
+            "プレイヤー業務の増加がメンバー育成・1on1・心理的安全性の確保を圧迫し、組織の自律性低下につながっている。"
         ),
-        "source": "リクルートマネジメントソリューションズ",
-        "url": "https://www.recruit-ms.co.jp/",
+        "source": "リクルートマネジメントソリューションズ マネジメントに対する意識調査2024年",
+        "url": "https://www.recruit-ms.co.jp/news/pressrelease/7265428582/",
     },
     {
         "category": "人材開発",
@@ -115,19 +115,19 @@ MARKET_TRENDS: list[dict] = [
             "企業主導の集合研修から「個人が主体的に学ぶリスキリング」へのパラダイムシフトが加速。"
             "経済産業省は学び直し支援の制度整備を進め、企業側も補助金活用と学習機会提供が競争力の差別化要因となってきている。"
         ),
-        "source": "経済産業省 リスキリングを通じたキャリアアップ支援",
-        "url": "https://www.meti.go.jp/policy/human_resource/reskilling/",
+        "source": "経済産業省 リスキリングを通じたキャリアアップ支援事業",
+        "url": "https://careerup.reskilling.go.jp/",
     },
     {
         "category": "HRテック",
         "headline": "国内HRテック市場が急拡大、エンゲージメント・タレント管理が牽引",
         "body": (
-            "国内HRテック市場は2025年度に2,000億円規模に達する見込み（矢野経済研究所）。"
+            "デロイト トーマツ ミック経済研究所の調査では、国内HRTechクラウド市場は2024年度に前年比128.5%の1,385億円見込み。"
             "エンゲージメントサーベイ・タレントマネジメント・採用DXが三大注目領域。"
             "一方でツール乱立による「導入疲れ」も顕在化しており、統合型プラットフォームへの移行が次のトレンドとして浮上している。"
         ),
-        "source": "矢野経済研究所",
-        "url": "https://www.yano.co.jp/",
+        "source": "デロイト トーマツ ミック経済研究所 HRTechクラウド市場の実態と展望2024年度版",
+        "url": "https://mic-r.co.jp/mr/03350/",
     },
 ]
 
