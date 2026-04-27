@@ -836,7 +836,7 @@ HTML_TEMPLATE = """\
       font-family: -apple-system, sans-serif;
     }
     .card-hot .card-tag { background: var(--hot-border); color: #ffffff; }
-    .impact-stars { display: flex; align-items: center; font-size: 12px; letter-spacing: 0.01em; line-height: 1; }
+    .impact-stars { display: flex; align-items: center; font-size: 12px; letter-spacing: 0.01em; line-height: 1; height: 14px; }
     .star.filled { color: var(--star-filled); }
     .star.empty  { color: var(--star-empty); }
     .badge-new {
@@ -960,8 +960,8 @@ HTML_TEMPLATE = """\
     [data-theme="dark"] .hashtag { color: var(--accent2); background: var(--tag-bg); }
     .impact-val { font-size: 10px; color: var(--muted); font-family: -apple-system, sans-serif; margin-left: 2px; }
     .impact-label { font-size: 8px; color: var(--muted); font-family: -apple-system, sans-serif; letter-spacing: 0.04em; margin-left: 4px; text-transform: uppercase; }
-    .impact-block { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
-    .impact-axes { display: flex; gap: 6px; flex-wrap: nowrap; align-items: center; }
+    .impact-block { margin-bottom: 8px; }
+    .impact-axes { display: flex; gap: 6px; flex-wrap: nowrap; align-items: center; height: 10px; margin-top: 2px; }
     .axis-item { display: flex; align-items: center; gap: 1px; }
     .axis-label { font-size: 7.5px; font-weight: 700; letter-spacing: 0.06em; line-height: 1; color: var(--muted); font-family: -apple-system, sans-serif; text-transform: uppercase; min-width: 20px; }
     .mini-star { font-size: 8px; line-height: 1; }
@@ -969,12 +969,6 @@ HTML_TEMPLATE = """\
     .mini-star.empty  { color: var(--star-empty); }
     .mini-val { font-size: 8px; line-height: 1; color: var(--muted); font-family: -apple-system, sans-serif; margin-left: 1px; }
     .empty { grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 60px 0; font-size: 14px; font-family: -apple-system, sans-serif; }
-
-    /* ===== DEBUG (REMOVE) ===== */
-    .card-meta { background: rgba(255,165,0,0.25) !important; }
-    .impact-block { background: rgba(255,0,0,0.1) !important; outline: 2px solid red; }
-    .impact-stars { background: rgba(0,200,0,0.3) !important; }
-    .impact-axes { background: rgba(0,100,255,0.3) !important; }
 
     /* ===== Accordion ===== */
     .exp-text { max-height: 4.8em; overflow: hidden; transition: max-height 0.32s ease; }
