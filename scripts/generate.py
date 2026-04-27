@@ -839,7 +839,7 @@ HTML_TEMPLATE = """\
       font-family: -apple-system, sans-serif;
     }
     .card-hot .card-tag { background: var(--hot-border); color: #ffffff; }
-    .impact-stars { font-size: 12px; letter-spacing: 0.01em; line-height: 1; }
+    .impact-stars { display: block; font-size: 12px; letter-spacing: 0.01em; line-height: 1; }
     .star.filled { color: var(--star-filled); }
     .star.empty  { color: var(--star-empty); }
     .badge-new {
@@ -963,8 +963,8 @@ HTML_TEMPLATE = """\
     [data-theme="dark"] .hashtag { color: var(--accent2); background: var(--tag-bg); }
     .impact-val { font-size: 10px; color: var(--muted); font-family: -apple-system, sans-serif; margin-left: 2px; }
     .impact-label { font-size: 8px; color: var(--muted); font-family: -apple-system, sans-serif; letter-spacing: 0.04em; margin-left: 4px; text-transform: uppercase; }
-    .impact-block { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 8px; line-height: 1; }
-    .impact-axes { display: flex; gap: 6px; flex-wrap: nowrap; align-items: center; }
+    .impact-block { margin-bottom: 8px; }
+    .impact-axes { display: flex; gap: 6px; flex-wrap: nowrap; align-items: center; margin-top: 2px; }
     .axis-item { display: inline-flex; align-items: center; gap: 1px; }
     .axis-label { font-size: 7.5px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); font-family: -apple-system, sans-serif; text-transform: uppercase; min-width: 20px; }
     .mini-star { font-size: 8px; line-height: 1; }
