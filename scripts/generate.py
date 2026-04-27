@@ -482,10 +482,7 @@ HTML_TEMPLATE = """\
 
 {%- macro render_stars(impact, axes=none) -%}
 <div class="impact-block">
-<span class="impact-stars" title="Impact {{ "%.1f"|format(impact|float) }}/5{% if axes and axes.per is defined %} | PER:{{ "%.1f"|format(axes.per|float) }} SCI:{{ "%.1f"|format(axes.sci|float) }} CPS:{{ "%.1f"|format(axes.cps|float) }}{% endif %}">
-  {%- for i in range(1, 6) -%}<span class="star {{ 'filled' if i <= impact|float else 'empty' }}">★</span>{%- endfor -%}
-  <span class="impact-val">{{ "%.1f"|format(impact|float) }}</span><span class="impact-label">Total</span>
-</span>
+<div class="impact-stars" title="Impact {{ "%.1f"|format(impact|float) }}/5{% if axes and axes.per is defined %} | PER:{{ "%.1f"|format(axes.per|float) }} SCI:{{ "%.1f"|format(axes.sci|float) }} CPS:{{ "%.1f"|format(axes.cps|float) }}{% endif %}">{%- for i in range(1, 6) -%}<span class="star {{ 'filled' if i <= impact|float else 'empty' }}">★</span>{%- endfor -%}<span class="impact-val">{{ "%.1f"|format(impact|float) }}</span><span class="impact-label">Total</span></div>
 {%- if axes and axes.per is defined and (axes.per|float + axes.sci|float + axes.cps|float) > 0 %}
 <div class="impact-axes">
   <span class="axis-item" title="PER &amp; Social Impact"><span class="axis-label">PER</span>{{ render_mini_stars(axes.per) }}</span>
@@ -839,7 +836,7 @@ HTML_TEMPLATE = """\
       font-family: -apple-system, sans-serif;
     }
     .card-hot .card-tag { background: var(--hot-border); color: #ffffff; }
-    .impact-stars { display: block; font-size: 12px; letter-spacing: 0.01em; line-height: 1; }
+    .impact-stars { display: flex; align-items: center; font-size: 12px; letter-spacing: 0.01em; line-height: 1; }
     .star.filled { color: var(--star-filled); }
     .star.empty  { color: var(--star-empty); }
     .badge-new {
@@ -963,14 +960,14 @@ HTML_TEMPLATE = """\
     [data-theme="dark"] .hashtag { color: var(--accent2); background: var(--tag-bg); }
     .impact-val { font-size: 10px; color: var(--muted); font-family: -apple-system, sans-serif; margin-left: 2px; }
     .impact-label { font-size: 8px; color: var(--muted); font-family: -apple-system, sans-serif; letter-spacing: 0.04em; margin-left: 4px; text-transform: uppercase; }
-    .impact-block { margin-bottom: 8px; }
-    .impact-axes { display: flex; gap: 6px; flex-wrap: nowrap; align-items: center; margin-top: 2px; }
-    .axis-item { display: inline-flex; align-items: center; gap: 1px; }
-    .axis-label { font-size: 7.5px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); font-family: -apple-system, sans-serif; text-transform: uppercase; min-width: 20px; }
+    .impact-block { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
+    .impact-axes { display: flex; gap: 6px; flex-wrap: nowrap; align-items: center; }
+    .axis-item { display: flex; align-items: center; gap: 1px; }
+    .axis-label { font-size: 7.5px; font-weight: 700; letter-spacing: 0.06em; line-height: 1; color: var(--muted); font-family: -apple-system, sans-serif; text-transform: uppercase; min-width: 20px; }
     .mini-star { font-size: 8px; line-height: 1; }
     .mini-star.filled { color: var(--star-filled); }
     .mini-star.empty  { color: var(--star-empty); }
-    .mini-val { font-size: 8px; color: var(--muted); font-family: -apple-system, sans-serif; margin-left: 1px; }
+    .mini-val { font-size: 8px; line-height: 1; color: var(--muted); font-family: -apple-system, sans-serif; margin-left: 1px; }
     .empty { grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 60px 0; font-size: 14px; font-family: -apple-system, sans-serif; }
 
     /* ===== Accordion ===== */
@@ -1581,7 +1578,7 @@ HTML_TEMPLATE = """\
     <span class="card-tag">${a.category_label||''}</span>${src}
   </div>
   <div class="impact-block">
-    <span class="impact-stars" title="Impact ${imp.toFixed(1)}/5${axTitle}">${stars}<span class="impact-val">${imp.toFixed(1)}</span><span class="impact-label">Total</span></span>${axesHtml}
+    <div class="impact-stars" title="Impact ${imp.toFixed(1)}/5${axTitle}">${stars}<span class="impact-val">${imp.toFixed(1)}</span><span class="impact-label">Total</span></div>${axesHtml}
   </div>
   <div class="card-title"><a href="${a.url}" target="_blank" rel="noopener">${a.title_ja}</a></div>
   ${hashtags ? `<div class="card-hashtags">${hashtags}</div>` : ''}
